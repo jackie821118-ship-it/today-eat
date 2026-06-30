@@ -6,18 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>今天吃什麼</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#FFF7F0;
-    --bg-soft:#FFF0E6;
     --surface:#FFFFFF;
     --surface-2:#FFF3EC;
     --ink:#4A3F46;
     --ink-dim:#9B8E94;
-    --red:#FF8FA3;
+    --red:#E2486A;
+    --red-soft:#FF8FA3;
     --gold:#FFD166;
-    --green:#8AD1B8;
+    --green:#4FA988;
+    --green-soft:#8AD1B8;
     --blue:#A5C8FF;
     --purple:#C9B6F2;
     --line:rgba(74,63,70,0.12);
@@ -37,7 +38,7 @@
     min-height:100vh;
     display:flex;
     justify-content:center;
-    padding:28px 16px 60px;
+    padding:14px 14px 18px;
   }
   .app{
     width:100%;
@@ -47,90 +48,62 @@
 /* ––––– Header ––––– */
 header{
 text-align:center;
-margin-bottom:22px;
-margin-top:4px;
-}
-.lantern{
-width:46px;
-height:46px;
-margin:0 auto 10px;
-display:block;
-}
-.stamp{
-position:absolute;
-top:-4px;
-right:6%;
-width:58px;
-height:58px;
-border-radius:50%;
-border:2px solid var(–red);
-color:var(–red);
-font-family:‘Noto Sans TC’, sans-serif;
-font-weight:900;
-font-size:11px;
-line-height:1.3;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
-transform:rotate(-12deg);
-opacity:0.82;
-mix-blend-mode:multiply;
+margin-bottom:10px;
 }
 h1{
 font-family:‘Zen Maru Gothic’, sans-serif;
 font-weight:900;
-font-size:42px;
+font-size:32px;
 letter-spacing:1px;
 margin:0;
 position:relative;
 display:inline-block;
 color:var(–ink);
-padding:4px 10px;
+padding:2px 34px;
 }
 h1::before{
 content:‘🍜’;
 position:absolute;
-left:-34px;
+left:-2px;
 top:50%;
 transform:translateY(-50%) rotate(-12deg);
-font-size:26px;
+font-size:22px;
 }
 h1::after{
 content:‘🍙’;
 position:absolute;
-right:-34px;
+right:-2px;
 top:50%;
 transform:translateY(-50%) rotate(12deg);
-font-size:26px;
+font-size:22px;
 }
 .subtitle{
-margin-top:14px;
+margin-top:6px;
 display:inline-block;
 font-family:‘Zen Maru Gothic’, sans-serif;
 font-weight:700;
-font-size:13px;
+font-size:12px;
 letter-spacing:1px;
 color:var(–ink);
 background:var(–gold);
-padding:5px 14px;
+padding:4px 12px;
 border-radius:999px;
-box-shadow:0 3px 0 rgba(74,63,70,0.12);
+box-shadow:0 2px 0 rgba(74,63,70,0.12);
 }
 
 /* ––––– Category tabs ––––– */
 .tabs{
 display:flex;
 flex-wrap:wrap;
-gap:8px;
+gap:6px;
 justify-content:center;
-margin-bottom:24px;
+margin-bottom:12px;
 }
 .tab{
 font-family:‘Zen Maru Gothic’, sans-serif;
 font-weight:700;
-font-size:16px;
-padding:8px 16px;
+font-size:14px;
+padding:6px 13px;
 border-radius:999px;
 border:2px solid var(–line);
 background:var(–surface);
@@ -138,22 +111,22 @@ color:var(–ink);
 cursor:pointer;
 transition:all .15s ease;
 user-select:none;
-box-shadow:0 3px 0 rgba(74,63,70,0.1);
+box-shadow:0 2px 0 rgba(74,63,70,0.1);
 }
 .tab:hover{ border-color:var(–gold); }
 .tab.active{
 background:var(–red);
 border-color:var(–red);
 color:#fff;
-box-shadow:0 3px 0 rgba(216,108,128,0.6);
+box-shadow:0 2px 0 #A4203F;
 transform:translateY(1px);
 }
 .tab .count{
 font-family:‘Zen Maru Gothic’, sans-serif;
 font-weight:700;
-font-size:12px;
-opacity:.7;
-margin-left:4px;
+font-size:11px;
+opacity:.8;
+margin-left:3px;
 }
 
 /* ––––– Wheel ––––– */
@@ -162,31 +135,31 @@ position:relative;
 display:flex;
 flex-direction:column;
 align-items:center;
-margin-bottom:18px;
+margin-bottom:8px;
 }
 .pointer{
 width:0;
 height:0;
-border-left:11px solid transparent;
-border-right:11px solid transparent;
-border-top:18px solid var(–red);
+border-left:10px solid transparent;
+border-right:10px solid transparent;
+border-top:16px solid var(–red);
 filter:drop-shadow(0 2px 3px rgba(74,63,70,.25));
 margin-bottom:-2px;
 z-index:3;
 }
 .wheel-outer{
 position:relative;
-width:min(320px, 84vw);
-height:min(320px, 84vw);
+width:min(248px, 62vw);
+height:min(248px, 62vw);
 border-radius:50%;
 background:var(–surface);
-padding:10px;
-box-shadow:0 0 0 4px #fff, 0 0 0 7px var(–gold), 0 14px 30px rgba(74,63,70,.18);
+padding:8px;
+box-shadow:0 0 0 4px #fff, 0 0 0 7px var(–gold), 0 10px 22px rgba(74,63,70,.18);
 }
 .wheel-hub{
 position:absolute;
 top:50%; left:50%;
-width:46px; height:46px;
+width:38px; height:38px;
 transform:translate(-50%,-50%);
 background:#fff;
 border:3px solid var(–red);
@@ -195,7 +168,7 @@ z-index:4;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:18px;
+font-size:15px;
 }
 #wheelCanvas{
 width:100%;
@@ -212,54 +185,54 @@ align-items:center;
 justify-content:center;
 text-align:center;
 color:var(–ink-dim);
-font-size:13px;
-padding:0 40px;
+font-size:12px;
+padding:0 30px;
 }
 
 /* ––––– Spin button ––––– */
 .spin-btn{
-margin-top:22px;
+margin-top:12px;
 font-family:‘Zen Maru Gothic’, sans-serif;
 font-weight:900;
-font-size:19px;
-padding:14px 50px;
+font-size:17px;
+padding:11px 42px;
 border-radius:999px;
 border:none;
 background:var(–red);
 color:#fff;
 cursor:pointer;
-box-shadow:0 5px 0 #E07089;
+box-shadow:0 4px 0 #A4203F;
 transition:transform .1s ease, box-shadow .1s ease;
 letter-spacing:2px;
 }
-.spin-btn:active{ transform:translateY(4px); box-shadow:0 1px 0 #E07089; }
+.spin-btn:active{ transform:translateY(3px); box-shadow:0 1px 0 #A4203F; }
 .spin-btn:disabled{
 background:var(–surface-2);
 color:var(–ink-dim);
-box-shadow:0 5px 0 rgba(74,63,70,0.1);
+box-shadow:0 4px 0 rgba(74,63,70,0.1);
 cursor:not-allowed;
 }
 .spin-caption{
 font-family:‘Zen Maru Gothic’, sans-serif;
 font-weight:500;
-font-size:11px;
+font-size:10px;
 letter-spacing:2px;
 color:var(–ink-dim);
-margin-top:10px;
+margin-top:6px;
 }
 
 /* ––––– Result banner ––––– */
 .result{
-margin-top:26px;
+margin-top:12px;
 text-align:center;
-padding:20px;
-border-radius:18px;
+padding:12px;
+border-radius:16px;
 background:var(–surface);
-border:3px dashed var(–green);
-box-shadow:0 6px 0 rgba(138,209,184,0.3);
+border:3px dashed var(–green-soft);
+box-shadow:0 4px 0 rgba(138,209,184,0.3);
 display:none;
 }
-.result.show{ display:block; animation:glow 1.4s ease-out; }
+.result.show{ display:block; animation:glow 1.2s ease-out; }
 @keyframes glow{
 0%{ transform:scale(.85) rotate(-2deg); opacity:0;}
 50%{ transform:scale(1.04) rotate(1deg); }
@@ -268,189 +241,23 @@ display:none;
 .result-label{
 font-family:‘Zen Maru Gothic’, sans-serif;
 font-weight:700;
-font-size:14px;
+font-size:12px;
 letter-spacing:2px;
 color:var(–green);
 }
 .result-name{
 font-family:‘Zen Maru Gothic’, sans-serif;
 font-weight:900;
-font-size:30px;
-margin-top:8px;
+font-size:24px;
+margin-top:4px;
 color:var(–ink);
-}
-
-/* ––––– Manage panel ––––– */
-.manage-toggle{
-display:block;
-margin:34px auto 0;
-background:var(–surface);
-border:2px solid var(–line);
-color:var(–ink);
-font-family:‘Zen Maru Gothic’, sans-serif;
-font-weight:700;
-font-size:15px;
-padding:9px 20px;
-border-radius:999px;
-cursor:pointer;
-box-shadow:0 3px 0 rgba(74,63,70,0.1);
-}
-.manage-toggle:hover{ border-color:var(–blue); }
-.manage-panel{
-margin-top:16px;
-background:var(–surface);
-border:2px solid var(–line);
-border-radius:18px;
-padding:18px;
-display:none;
-}
-.manage-panel.show{ display:block; }
-.manage-panel h2{
-font-family:‘Zen Maru Gothic’, sans-serif;
-font-size:17px;
-font-weight:900;
-margin:0 0 14px;
-color:var(–ink);
-}
-.add-row{
-display:flex;
-gap:8px;
-margin-bottom:12px;
-}
-.add-row input{
-flex:1;
-background:var(–bg-soft);
-border:2px solid var(–line);
-border-radius:12px;
-color:var(–ink);
-padding:10px 12px;
-font-size:16px;
-font-family:‘Noto Sans TC’, sans-serif;
-}
-.add-row input:focus{ outline:none; border-color:var(–blue); }
-.cat-checks{
-display:flex;
-flex-wrap:wrap;
-gap:6px;
-margin-bottom:12px;
-}
-.cat-check{
-font-family:‘Zen Maru Gothic’, sans-serif;
-font-weight:700;
-font-size:14px;
-padding:6px 12px;
-border-radius:999px;
-border:2px solid var(–line);
-background:var(–surface);
-color:var(–ink-dim);
-cursor:pointer;
-user-select:none;
-}
-.cat-check.checked{
-background:var(–green);
-border-color:var(–green);
-color:#fff;
-}
-.add-btn{
-width:100%;
-background:var(–green);
-color:#fff;
-border:none;
-border-radius:12px;
-padding:11px;
-font-weight:900;
-font-size:16px;
-cursor:pointer;
-font-family:‘Zen Maru Gothic’, sans-serif;
-box-shadow:0 4px 0 rgba(106,184,158,0.6);
-}
-.add-btn:active{ transform:translateY(3px); box-shadow:0 1px 0 rgba(106,184,158,0.6); }
-.add-btn:disabled{ opacity:.4; cursor:not-allowed; }
-.list{
-margin-top:16px;
-border-top:1px solid var(–line);
-padding-top:12px;
-max-height:260px;
-overflow-y:auto;
-}
-.list-item{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-padding:9px 0;
-border-bottom:1px solid var(–line);
-}
-.list-item:last-child{ border-bottom:none; }
-.li-name{ font-size:17px; font-family:‘Zen Maru Gothic’, sans-serif; font-weight:700; }
-.li-tags{
-font-family:‘Noto Sans TC’, sans-serif;
-font-size:12px;
-color:var(–ink-dim);
-margin-top:3px;
-}
-.li-del{
-background:none;
-border:none;
-color:var(–ink-dim);
-font-size:22px;
-cursor:pointer;
-line-height:1;
-padding:4px 8px;
-}
-.li-del:hover{ color:var(–red); }
-.li-edit{
-background:none;
-border:none;
-color:var(–ink-dim);
-font-size:18px;
-cursor:pointer;
-line-height:1;
-padding:4px 6px;
-}
-.li-edit:hover{ color:var(–blue); }
-.li-actions{
-display:flex;
-align-items:center;
-gap:2px;
-flex-shrink:0;
-}
-.list-item.editing{
-flex-direction:column;
-align-items:stretch;
-gap:8px;
-background:var(–bg-soft);
-border-radius:10px;
-padding:12px;
-}
-.edit-row-actions{
-display:flex;
-gap:8px;
-}
-.edit-row-actions button{
-flex:1;
-border:none;
-border-radius:10px;
-padding:9px;
-font-weight:700;
-font-size:15px;
-cursor:pointer;
-font-family:‘Zen Maru Gothic’, sans-serif;
-}
-.edit-save{ background:var(–green); color:#fff; }
-.edit-cancel{ background:var(–surface-2); color:var(–ink-dim); }
-.empty-list{
-text-align:center;
-color:var(–ink-dim);
-font-size:15px;
-padding:14px 0;
 }
 </style>
 
 </head>
 <body>
 <div class="app">
-  <header style="position:relative;">
+  <header>
     <h1>今天吃什麼</h1>
     <div class="subtitle">挑類別 · 轉一圈 · 今晚交給天意</div>
   </header>
@@ -462,7 +269,7 @@ padding:14px 0;
     <div class="wheel-outer">
       <canvas id="wheelCanvas" width="600" height="600"></canvas>
       <div class="wheel-hub">🍴</div>
-      <div class="empty-wheel" id="emptyWheel" style="display:none;">這個類別還沒有餐廳<br>到下方「管理清單」新增一個吧</div>
+      <div class="empty-wheel" id="emptyWheel" style="display:none;">這個類別沒有餐廳</div>
     </div>
   </div>
 
@@ -475,115 +282,69 @@ padding:14px 0;
     <div class="result-label">今天就吃</div>
     <div class="result-name" id="resultName">—</div>
   </div>
-
-<button class="manage-toggle" id="manageToggle">管理餐廳清單</button>
-
-  <div class="manage-panel" id="managePanel">
-    <h2>新增餐廳</h2>
-    <div class="add-row">
-      <input type="text" id="nameInput" placeholder="餐廳名稱,例如:鼎泰豐" maxlength="30">
-    </div>
-    <div class="cat-checks" id="catChecks"></div>
-    <button class="add-btn" id="addBtn">加入清單</button>
-
-```
-<h2 style="margin-top:18px;">目前清單</h2>
-<div class="list" id="list"></div>
-```
-
-  </div>
 </div>
 
 <script>
 (function(){
   const CATEGORIES = ['早餐','午餐','晚餐','甜點','宵夜','餐廳'];
-  const SEED = [
-    {id:1, name:'烤鴨', categories:['晚餐','餐廳']},
-    {id:2, name:'梁社漢排骨', categories:['午餐','晚餐']},
-    {id:3, name:'陽春麵', categories:['早餐','午餐','晚餐']},
-    {id:4, name:'魷魚羹麵', categories:['午餐','晚餐']},
-    {id:5, name:'蔥抓餅', categories:['早餐']},
-    {id:6, name:'雞絲麵、廣東粥', categories:['早餐']},
-    {id:7, name:'鹽酥雞', categories:['晚餐','宵夜']},
-    {id:8, name:'紅豆媽媽', categories:['甜點']},
-    {id:9, name:'碗糕、擔仔麵', categories:['午餐','晚餐']},
-    {id:10, name:'義大利麵', categories:['午餐','晚餐','餐廳']},
-    {id:11, name:'牛肉麵(中港、新泰、森豐)', categories:['午餐','晚餐']},
-    {id:12, name:'豬腸冬粉', categories:['午餐','晚餐']},
-    {id:13, name:'蚵仔麵線、臭豆腐', categories:['午餐','晚餐','宵夜']},
-    {id:14, name:'麻油麵線', categories:['晚餐','宵夜']},
-    {id:15, name:'香香鹵味', categories:['宵夜']},
-    {id:16, name:'土魠魚麵', categories:['早餐','午餐']},
-    {id:17, name:'鴨肉羹麵', categories:['午餐','晚餐']},
-    {id:18, name:'牛排', categories:['晚餐','餐廳']},
-    {id:19, name:'鐵板燒', categories:['晚餐','餐廳']},
-    {id:20, name:'胖老爹', categories:['午餐','晚餐','宵夜']},
-    {id:21, name:'中華麵攤(麻醬麵)', categories:['午餐','晚餐']},
-    {id:22, name:'鴨肉麵(正忠排骨酥)', categories:['午餐','晚餐']},
-    {id:23, name:'溪仔邊烤肉', categories:['晚餐','餐廳']},
-    {id:24, name:'肉粥(黃昏市場)', categories:['晚餐','宵夜']},
-    {id:25, name:'雞肉飯、紅燒鰻', categories:['午餐','晚餐']},
-    {id:26, name:'好吃雞肉', categories:['午餐','晚餐']},
-    {id:27, name:'魯肉便當', categories:['午餐','晚餐']},
-    {id:28, name:'武廟肉羹', categories:['早餐','午餐']},
-    {id:29, name:'八方雲集', categories:['午餐','晚餐','宵夜']},
-    {id:30, name:'麻辣豆腐', categories:['晚餐']},
-    {id:31, name:'炒麵(飯)', categories:['午餐','晚餐']},
-    {id:32, name:'虱目魚粥', categories:['早餐','午餐']},
-    {id:33, name:'辣炒年糕', categories:['午餐','晚餐','宵夜']},
-    {id:34, name:'排骨酥麵', categories:['午餐','晚餐']},
-    {id:35, name:'肯德基', categories:['午餐','晚餐','宵夜','餐廳']},
-    {id:36, name:'麥當勞', categories:['早餐','午餐','晚餐','宵夜']},
-    {id:37, name:'必勝客', categories:['午餐','晚餐','餐廳']},
-    {id:38, name:'砂鍋粥', categories:['晚餐','宵夜']}
+
+  // 餐廳名單直接寫在這裡。每筆是 {name: 名稱, categories: [類別,...]}
+  // 要新增/修改餐廳,直接編輯下面這個陣列就好。
+  const restaurants = [
+    {name:'烤鴨', categories:['晚餐','餐廳']},
+    {name:'梁社漢排骨', categories:['午餐','晚餐']},
+    {name:'陽春麵', categories:['早餐','午餐','晚餐']},
+    {name:'魷魚羹麵', categories:['午餐','晚餐']},
+    {name:'蔥抓餅', categories:['早餐']},
+    {name:'雞絲麵、廣東粥', categories:['早餐']},
+    {name:'鹽酥雞', categories:['晚餐','宵夜']},
+    {name:'紅豆媽媽', categories:['甜點']},
+    {name:'碗糕、擔仔麵', categories:['午餐','晚餐']},
+    {name:'義大利麵', categories:['午餐','晚餐','餐廳']},
+    {name:'牛肉麵(中港、新泰、森豐)', categories:['午餐','晚餐']},
+    {name:'豬腸冬粉', categories:['午餐','晚餐']},
+    {name:'蚵仔麵線、臭豆腐', categories:['午餐','晚餐','宵夜']},
+    {name:'麻油麵線', categories:['晚餐','宵夜']},
+    {name:'香香鹵味', categories:['宵夜']},
+    {name:'土魠魚麵', categories:['早餐','午餐']},
+    {name:'鴨肉羹麵', categories:['午餐','晚餐']},
+    {name:'牛排', categories:['晚餐','餐廳']},
+    {name:'鐵板燒', categories:['晚餐','餐廳']},
+    {name:'胖老爹', categories:['午餐','晚餐','宵夜']},
+    {name:'中華麵攤(麻醬麵)', categories:['午餐','晚餐']},
+    {name:'鴨肉麵(正忠排骨酥)', categories:['午餐','晚餐']},
+    {name:'溪仔邊烤肉', categories:['晚餐','餐廳']},
+    {name:'肉粥(黃昏市場)', categories:['晚餐','宵夜']},
+    {name:'雞肉飯、紅燒鰻', categories:['午餐','晚餐']},
+    {name:'好吃雞肉', categories:['午餐','晚餐']},
+    {name:'魯肉便當', categories:['午餐','晚餐']},
+    {name:'武廟肉羹', categories:['早餐','午餐']},
+    {name:'八方雲集', categories:['午餐','晚餐','宵夜']},
+    {name:'麻辣豆腐', categories:['晚餐']},
+    {name:'炒麵(飯)', categories:['午餐','晚餐']},
+    {name:'虱目魚粥', categories:['早餐','午餐']},
+    {name:'辣炒年糕', categories:['午餐','晚餐','宵夜']},
+    {name:'排骨酥麵', categories:['午餐','晚餐']},
+    {name:'肯德基', categories:['午餐','晚餐','宵夜','餐廳']},
+    {name:'麥當勞', categories:['早餐','午餐','晚餐','宵夜']},
+    {name:'必勝客', categories:['午餐','晚餐','餐廳']},
+    {name:'砂鍋粥', categories:['晚餐','宵夜']}
   ];
 
-  let restaurants = [];
   let activeCategory = 'all';
   let rotation = 0;
   let spinning = false;
-  let pendingChecks = new Set();
-  let editingId = null;
-  let editPendingChecks = new Set();
 
   const tabsEl = document.getElementById('tabs');
-  const listEl = document.getElementById('list');
-  const catChecksEl = document.getElementById('catChecks');
   const canvas = document.getElementById('wheelCanvas');
   const ctx = canvas.getContext('2d');
   const spinBtn = document.getElementById('spinBtn');
   const resultEl = document.getElementById('result');
   const resultNameEl = document.getElementById('resultName');
   const emptyWheelEl = document.getElementById('emptyWheel');
-  const manageToggle = document.getElementById('manageToggle');
-  const managePanel = document.getElementById('managePanel');
-  const nameInput = document.getElementById('nameInput');
-  const addBtn = document.getElementById('addBtn');
 
   const SEGMENT_FILLS = ['#FFE0E6', '#FFF3D6', '#DFF3EA', '#E4EEFF', '#EFE6FB'];
   const SEGMENT_BORDERS = ['#FF8FA3', '#FFD166', '#8AD1B8', '#A5C8FF', '#C9B6F2'];
-
-  async function loadData(){
-    try{
-      const raw = localStorage.getItem('restaurants_v2');
-      restaurants = raw ? JSON.parse(raw) : SEED;
-    }catch(e){
-      restaurants = SEED;
-    }
-    if(!restaurants || restaurants.length === 0){
-      restaurants = SEED;
-    }
-    await saveData();
-    renderAll();
-  }
-
-  async function saveData(){
-    try{
-      localStorage.setItem('restaurants_v2', JSON.stringify(restaurants));
-    }catch(e){
-      console.error('儲存失敗', e);
-    }
-  }
 
   function getFiltered(){
     if(activeCategory === 'all') return restaurants;
@@ -606,138 +367,6 @@ padding:14px 0;
       };
       tabsEl.appendChild(btn);
     });
-  }
-
-  function renderCatChecks(){
-    catChecksEl.innerHTML = '';
-    CATEGORIES.forEach(c => {
-      const el = document.createElement('div');
-      el.className = 'cat-check' + (pendingChecks.has(c) ? ' checked' : '');
-      el.textContent = c;
-      el.onclick = () => {
-        if(pendingChecks.has(c)) pendingChecks.delete(c); else pendingChecks.add(c);
-        renderCatChecks();
-        updateAddBtn();
-      };
-      catChecksEl.appendChild(el);
-    });
-  }
-
-  function updateAddBtn(){
-    addBtn.disabled = !(nameInput.value.trim().length > 0 && pendingChecks.size > 0);
-  }
-
-  function renderList(){
-    listEl.innerHTML = '';
-    if(restaurants.length === 0){
-      listEl.innerHTML = '<div class="empty-list">清單是空的,新增一間餐廳開始吧</div>';
-      return;
-    }
-    restaurants.forEach(r => {
-      const row = document.createElement('div');
-
-      if(editingId === r.id){
-        row.className = 'list-item editing';
-
-        const nameInputEl = document.createElement('input');
-        nameInputEl.type = 'text';
-        nameInputEl.value = r.name;
-        nameInputEl.maxLength = 30;
-        nameInputEl.placeholder = '餐廳名稱';
-
-        const catsWrap = document.createElement('div');
-        catsWrap.className = 'cat-checks';
-        CATEGORIES.forEach(c => {
-          const chip = document.createElement('div');
-          chip.className = 'cat-check' + (editPendingChecks.has(c) ? ' checked' : '');
-          chip.textContent = c;
-          chip.onclick = () => {
-            if(editPendingChecks.has(c)) editPendingChecks.delete(c); else editPendingChecks.add(c);
-            renderList();
-          };
-          catsWrap.appendChild(chip);
-        });
-
-        const actions = document.createElement('div');
-        actions.className = 'edit-row-actions';
-        const saveBtn = document.createElement('button');
-        saveBtn.className = 'edit-save';
-        saveBtn.textContent = '儲存';
-        saveBtn.onclick = () => saveEdit(r.id, nameInputEl.value);
-        const cancelBtn = document.createElement('button');
-        cancelBtn.className = 'edit-cancel';
-        cancelBtn.textContent = '取消';
-        cancelBtn.onclick = cancelEdit;
-        actions.appendChild(saveBtn);
-        actions.appendChild(cancelBtn);
-
-        row.appendChild(nameInputEl);
-        row.appendChild(catsWrap);
-        row.appendChild(actions);
-      } else {
-        row.className = 'list-item';
-        row.innerHTML =
-          '<div><div class="li-name">' + escapeHtml(r.name) + '</div>' +
-          '<div class="li-tags">' + r.categories.join(' / ') + '</div></div>' +
-          '<div class="li-actions">' +
-          '<button class="li-edit" data-id="' + r.id + '">✎</button>' +
-          '<button class="li-del" data-id="' + r.id + '">×</button>' +
-          '</div>';
-        row.querySelector('.li-edit').onclick = () => startEdit(r);
-        row.querySelector('.li-del').onclick = () => removeRestaurant(r.id);
-      }
-      listEl.appendChild(row);
-    });
-  }
-
-  function startEdit(r){
-    editingId = r.id;
-    editPendingChecks = new Set(r.categories);
-    renderList();
-  }
-
-  function cancelEdit(){
-    editingId = null;
-    editPendingChecks = new Set();
-    renderList();
-  }
-
-  async function saveEdit(id, newName){
-    const name = newName.trim();
-    if(!name || editPendingChecks.size === 0) return;
-    restaurants = restaurants.map(r => r.id === id ? {...r, name, categories:Array.from(editPendingChecks)} : r);
-    editingId = null;
-    editPendingChecks = new Set();
-    await saveData();
-    resetResult();
-    renderAll();
-  }
-
-  function escapeHtml(s){
-    const d = document.createElement('div');
-    d.textContent = s;
-    return d.innerHTML;
-  }
-
-  async function removeRestaurant(id){
-    restaurants = restaurants.filter(r => r.id !== id);
-    await saveData();
-    resetResult();
-    renderAll();
-  }
-
-  async function addRestaurant(){
-    const name = nameInput.value.trim();
-    if(!name || pendingChecks.size === 0) return;
-    const newId = Date.now();
-    restaurants.push({id:newId, name, categories:Array.from(pendingChecks)});
-    await saveData();
-    nameInput.value = '';
-    pendingChecks.clear();
-    renderCatChecks();
-    updateAddBtn();
-    resetResult();
-    renderAll();
   }
 
   function resetResult(){
@@ -831,21 +460,11 @@ padding:14px 0;
 
   function renderAll(){
     renderTabs();
-    renderList();
     drawWheel();
   }
 
-  manageToggle.onclick = () => {
-    managePanel.classList.toggle('show');
-    manageToggle.textContent = managePanel.classList.contains('show') ? '收起清單管理' : '管理餐廳清單';
-  };
-  nameInput.oninput = updateAddBtn;
-  addBtn.onclick = addRestaurant;
   spinBtn.onclick = spin;
-
-  renderCatChecks();
-  updateAddBtn();
-  loadData();
+  renderAll();
 })();
 </script>
 
