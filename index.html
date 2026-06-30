@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>今天吃什麼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFF7F0;
+    --surface:#FFFFFF;
+    --surface-2:#FFF3EC;
+    --ink:#4A3F46;
+    --ink-dim:#9B8E94;
+    --red:#E2486A;
+    --red-soft:#FF8FA3;
+    --gold:#FFD166;
+    --green:#4FA988;
+    --green-soft:#8AD1B8;
+    --blue:#A5C8FF;
+    --purple:#C9B6F2;
+    --line:rgba(74,63,70,0.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      linear-gradient(rgba(165,200,255,0.10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(165,200,255,0.10) 1px, transparent 1px),
+      radial-gradient(circle at 15% 10%, rgba(255,143,163,0.10) 0%, transparent 35%),
+      radial-gradient(circle at 85% 90%, rgba(138,209,184,0.12) 0%, transparent 38%),
+      var(--bg);
+    background-size: 26px 26px, 26px 26px, 100% 100%, 100% 100%, 100% 100%;
+    color:var(--ink);
+    font-family:'Noto Sans TC', sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:14px 14px 18px;
+  }
+  .app{
+    width:100%;
+    max-width:480px;
+  }
+
+/* ––––– Header ––––– */
+header{
+text-align:center;
+margin-bottom:10px;
+}
+h1{
+font-family:‘Zen Maru Gothic’, sans-serif;
+font-weight:900;
+font-size:32px;
+letter-spacing:1px;
+margin:0;
+color:var(–ink);
+}
+.subtitle{
+margin-top:6px;
+display:inline-block;
+font-family:‘Zen Maru Gothic’, sans-serif;
+font-weight:700;
+font-size:12px;
+letter-spacing:1px;
+color:var(–ink);
+background:var(–gold);
+padding:4px 12px;
+border-radius:999px;
+box-shadow:0 2px 0 rgba(74,63,70,0.12);
+}
+
+/* ––––– Category tabs ––––– */
+.tabs{
+display:flex;
+flex-wrap:wrap;
+gap:6px;
+justify-content:center;
+margin-bottom:12px;
+}
+.tab{
+font-family:‘Zen Maru Gothic’, sans-serif;
+font-weight:700;
+font-size:14px;
+padding:6px 13px;
+border-radius:999px;
+border:2px solid var(–line);
+background:var(–surface);
+color:var(–ink);
+cursor:pointer;
+transition:all .15s ease;
+user-select:none;
+box-shadow:0 2px 0 rgba(74,63,70,0.1);
+}
+.tab:hover{ border-color:var(–gold); }
+.tab.active{
+background:var(–red);
+border-color:var(–red);
+color:#fff;
+box-shadow:0 2px 0 #A4203F;
+transform:translateY(1px);
+}
+.tab .count{
+font-family:‘Zen Maru Gothic’, sans-serif;
+font-weight:700;
+font-size:11px;
+opacity:.8;
+margin-left:3px;
+}
+
+/* ––––– Wheel ––––– */
+.wheel-zone{
+position:relative;
+display:flex;
+flex-direction:column;
+align-items:center;
+margin-bottom:8px;
+}
+.pointer{
+width:0;
+height:0;
+border-left:10px solid transparent;
+border-right:10px solid transparent;
+border-top:16px solid var(–red);
+filter:drop-shadow(0 2px 3px rgba(74,63,70,.25));
+margin-bottom:-2px;
+z-index:3;
+}
+.wheel-outer{
+position:relative;
+width:min(248px, 62vw);
+height:min(248px, 62vw);
+border-radius:50%;
+background:var(–surface);
+padding:8px;
+box-shadow:0 0 0 4px #fff, 0 0 0 7px var(–gold), 0 10px 22px rgba(74,63,70,.18);
+}
+.wheel-hub{
+position:absolute;
+top:50%; left:50%;
+width:38px; height:38px;
+transform:translate(-50%,-50%);
+background:#fff;
+border:3px solid var(–red);
+border-radius:50%;
+z-index:4;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:15px;
+}
+#wheelCanvas{
+width:100%;
+height:100%;
+border-radius:50%;
+display:block;
+transition:transform 3.4s cubic-bezier(.15,.65,.1,1);
+}
+.empty-wheel{
+position:absolute;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+color:var(–ink-dim);
+font-size:12px;
+padding:0 30px;
+}
+
+/* ––––– Spin button ––––– */
+.spin-btn{
+margin-top:12px;
+font-family:‘Zen Maru Gothic’, sans-serif;
+font-weight:900;
+font-size:17px;
+padding:11px 42px;
+border-radius:999px;
+border:none;
+background:var(–red);
+color:#fff;
+cursor:pointer;
+box-shadow:0 4px 0 #A4203F;
+transition:transform .1s ease, box-shadow .1s ease;
+letter-spacing:2px;
+}
+.spin-btn:active{ transform:translateY(3px); box-shadow:0 1px 0 #A4203F; }
+.spin-btn:disabled{
+background:var(–surface-2);
+color:var(–ink-dim);
+box-shadow:0 4px 0 rgba(74,63,70,0.1);
+cursor:not-allowed;
+}
+.spin-caption{
+font-family:‘Zen Maru Gothic’, sans-serif;
+font-weight:500;
+font-size:10px;
+letter-spacing:2px;
+color:var(–ink-dim);
+margin-top:6px;
+}
+
+/* ––––– Result banner ––––– */
+.result{
+margin-top:12px;
+text-align:center;
+padding:12px;
+border-radius:16px;
+background:var(–surface);
+border:3px dashed var(–green-soft);
+box-shadow:0 4px 0 rgba(138,209,184,0.3);
+display:none;
+}
+.result.show{ display:block; animation:glow 1.2s ease-out; }
+@keyframes glow{
+0%{ transform:scale(.85) rotate(-2deg); opacity:0;}
+50%{ transform:scale(1.04) rotate(1deg); }
+100%{ transform:scale(1) rotate(0deg); opacity:1;}
+}
+.result-label{
+font-family:‘Zen Maru Gothic’, sans-serif;
+font-weight:700;
+font-size:12px;
+letter-spacing:2px;
+color:var(–green);
+}
+.result-name{
+font-family:‘Zen Maru Gothic’, sans-serif;
+font-weight:900;
+font-size:24px;
+margin-top:4px;
+color:var(–ink);
+}
+</style>
+
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>🍜 今天吃什麼 🍙</h1>
+    <div class="subtitle">挑類別 · 轉一圈 · 今晚交給天意</div>
+  </header>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="wheel-zone">
+    <div class="pointer"></div>
+    <div class="wheel-outer">
+      <canvas id="wheelCanvas" width="600" height="600"></canvas>
+      <div class="wheel-hub">🍴</div>
+      <div class="empty-wheel" id="emptyWheel" style="display:none;">這個類別沒有餐廳</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;">
+    <button class="spin-btn" id="spinBtn">轉一下</button>
+    <div class="spin-caption">spin the wheel</div>
+  </div>
+
+  <div class="result" id="result">
+    <div class="result-label">今天就吃</div>
+    <div class="result-name" id="resultName">—</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const CATEGORIES = ['早餐','午餐','晚餐','甜點','宵夜','餐廳'];
+
+  // 餐廳名單直接寫在這裡。每筆是 {name: 名稱, categories: [類別,...]}
+  // 要新增/修改餐廳,直接編輯下面這個陣列就好。
+  const restaurants = [
+    {name:'烤鴨', categories:['晚餐','餐廳']},
+    {name:'梁社漢排骨', categories:['午餐','晚餐']},
+    {name:'陽春麵', categories:['早餐','午餐','晚餐']},
+    {name:'魷魚羹麵', categories:['午餐','晚餐']},
+    {name:'蔥抓餅', categories:['早餐']},
+    {name:'雞絲麵、廣東粥', categories:['早餐']},
+    {name:'鹽酥雞', categories:['晚餐','宵夜']},
+    {name:'紅豆媽媽', categories:['甜點']},
+    {name:'碗糕、擔仔麵', categories:['午餐','晚餐']},
+    {name:'義大利麵', categories:['午餐','晚餐','餐廳']},
+    {name:'牛肉麵(中港、新泰、森豐)', categories:['午餐','晚餐']},
+    {name:'豬腸冬粉', categories:['午餐','晚餐']},
+    {name:'蚵仔麵線、臭豆腐', categories:['午餐','晚餐','宵夜']},
+    {name:'麻油麵線', categories:['晚餐','宵夜']},
+    {name:'香香鹵味', categories:['宵夜']},
+    {name:'土魠魚麵', categories:['早餐','午餐']},
+    {name:'鴨肉羹麵', categories:['午餐','晚餐']},
+    {name:'牛排', categories:['晚餐','餐廳']},
+    {name:'鐵板燒', categories:['晚餐','餐廳']},
+    {name:'胖老爹', categories:['午餐','晚餐','宵夜']},
+    {name:'中華麵攤(麻醬麵)', categories:['午餐','晚餐']},
+    {name:'鴨肉麵(正忠排骨酥)', categories:['午餐','晚餐']},
+    {name:'溪仔邊烤肉', categories:['晚餐','餐廳']},
+    {name:'肉粥(黃昏市場)', categories:['晚餐','宵夜']},
+    {name:'雞肉飯、紅燒鰻', categories:['午餐','晚餐']},
+    {name:'好吃雞肉', categories:['午餐','晚餐']},
+    {name:'魯肉便當', categories:['午餐','晚餐']},
+    {name:'武廟肉羹', categories:['早餐','午餐']},
+    {name:'八方雲集', categories:['午餐','晚餐','宵夜']},
+    {name:'麻辣豆腐', categories:['晚餐']},
+    {name:'炒麵(飯)', categories:['午餐','晚餐']},
+    {name:'虱目魚粥', categories:['早餐','午餐']},
+    {name:'辣炒年糕', categories:['午餐','晚餐','宵夜']},
+    {name:'排骨酥麵', categories:['午餐','晚餐']},
+    {name:'肯德基', categories:['午餐','晚餐','宵夜','餐廳']},
+    {name:'麥當勞', categories:['早餐','午餐','晚餐','宵夜']},
+    {name:'必勝客', categories:['午餐','晚餐','餐廳']},
+    {name:'砂鍋粥', categories:['晚餐','宵夜']}
+  ];
+
+  let activeCategory = 'all';
+  let rotation = 0;
+  let spinning = false;
+
+  const tabsEl = document.getElementById('tabs');
+  const canvas = document.getElementById('wheelCanvas');
+  const ctx = canvas.getContext('2d');
+  const spinBtn = document.getElementById('spinBtn');
+  const resultEl = document.getElementById('result');
+  const resultNameEl = document.getElementById('resultName');
+  const emptyWheelEl = document.getElementById('emptyWheel');
+
+  const SEGMENT_FILLS = ['#FFE0E6', '#FFF3D6', '#DFF3EA', '#E4EEFF', '#EFE6FB'];
+  const SEGMENT_BORDERS = ['#FF8FA3', '#FFD166', '#8AD1B8', '#A5C8FF', '#C9B6F2'];
+
+  function getFiltered(){
+    if(activeCategory === 'all') return restaurants;
+    return restaurants.filter(r => r.categories.includes(activeCategory));
+  }
+
+  function renderTabs(){
+    const all = [{key:'all', label:'全部'}].concat(CATEGORIES.map(c => ({key:c, label:c})));
+    tabsEl.innerHTML = '';
+    all.forEach(c => {
+      const count = c.key === 'all' ? restaurants.length : restaurants.filter(r=>r.categories.includes(c.key)).length;
+      const btn = document.createElement('div');
+      btn.className = 'tab' + (activeCategory === c.key ? ' active' : '');
+      btn.innerHTML = c.label + '<span class="count">' + count + '</span>';
+      btn.onclick = () => {
+        if(spinning) return;
+        activeCategory = c.key;
+        resetResult();
+        renderAll();
+      };
+      tabsEl.appendChild(btn);
+    });
+  }
+
+  function resetResult(){
+    resultEl.classList.remove('show');
+    rotation = 0;
+    canvas.style.transition = 'none';
+    canvas.style.transform = 'rotate(0deg)';
+    requestAnimationFrame(() => { canvas.style.transition = 'transform 3.4s cubic-bezier(.15,.65,.1,1)'; });
+  }
+
+  function drawWheel(){
+    const filtered = getFiltered();
+    const w = canvas.width, h = canvas.height;
+    const cx = w/2, cy = h/2, r = w/2 - 6;
+    ctx.clearRect(0,0,w,h);
+
+    if(filtered.length === 0){
+      emptyWheelEl.style.display = 'flex';
+      spinBtn.disabled = true;
+      return;
+    }
+    emptyWheelEl.style.display = 'none';
+    spinBtn.disabled = false;
+
+    const seg = (Math.PI*2) / filtered.length;
+    filtered.forEach((rest, i) => {
+      const start = i*seg, end = start+seg;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, start, end);
+      ctx.closePath();
+      ctx.fillStyle = SEGMENT_FILLS[i % SEGMENT_FILLS.length];
+      ctx.fill();
+      ctx.strokeStyle = SEGMENT_BORDERS[i % SEGMENT_BORDERS.length];
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(start + seg/2);
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      let maxChars = 10;
+      let fontSize = 30;
+      if(filtered.length > 4){ maxChars = 8; fontSize = 26; }
+      if(filtered.length > 8){ maxChars = 6; fontSize = 22; }
+      if(filtered.length > 12){ maxChars = 5; fontSize = 18; }
+      ctx.font = '900 ' + fontSize + 'px "Noto Sans TC", sans-serif';
+      let label = rest.name;
+      if(label.length > maxChars) label = label.slice(0, maxChars-1) + '…';
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+      ctx.lineJoin = 'round';
+      ctx.strokeText(label, r - 20, 0);
+      ctx.fillStyle = '#4A3F46';
+      ctx.fillText(label, r - 20, 0);
+      ctx.restore();
+    });
+  }
+
+  function spin(){
+    const filtered = getFiltered();
+    if(filtered.length === 0 || spinning) return;
+    spinning = true;
+    spinBtn.disabled = true;
+    resultEl.classList.remove('show');
+
+    const segDeg = 360 / filtered.length;
+    const winnerIndex = Math.floor(Math.random() * filtered.length);
+    const jitter = (Math.random() - 0.5) * segDeg * 0.6;
+    const midAngleDeg = (winnerIndex * segDeg + segDeg/2 + jitter);
+    let targetMod = (270 - midAngleDeg) % 360;
+    if(targetMod < 0) targetMod += 360;
+
+    const spins = 5 + Math.floor(Math.random()*3);
+    const currentMod = ((rotation % 360) + 360) % 360;
+    let delta = targetMod - currentMod;
+    if(delta <= 0) delta += 360;
+    rotation = rotation + delta + 360*spins;
+
+    canvas.style.transform = 'rotate(' + rotation + 'deg)';
+
+    setTimeout(() => {
+      spinning = false;
+      spinBtn.disabled = false;
+      const winner = filtered[winnerIndex];
+      resultNameEl.textContent = winner.name;
+      resultEl.classList.add('show');
+    }, 3500);
+  }
+
+  function renderAll(){
+    renderTabs();
+    drawWheel();
+  }
+
+  spinBtn.onclick = spin;
+  renderAll();
+})();
+</script>
+
+</body>
+</html>
