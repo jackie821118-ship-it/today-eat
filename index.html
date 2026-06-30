@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>今天吃什麼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#E8E0CB;
+    --bg-soft:#DED4B8;
+    --surface:#F7F0DD;
+    --surface-2:#EFE6CA;
+    --ink:#2B2418;
+    --ink-dim:#7A6B4D;
+    --red:#A8341F;
+    --gold:#B9842A;
+    --green:#5C6E3F;
+    --line:rgba(43,36,24,0.2);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 12% 8%, rgba(184,52,31,0.05) 0%, transparent 40%),
+      radial-gradient(circle at 88% 92%, rgba(43,36,24,0.06) 0%, transparent 45%),
+      repeating-linear-gradient(0deg, rgba(43,36,24,0.025) 0px, rgba(43,36,24,0.025) 1px, transparent 1px, transparent 3px),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Noto Sans TC', sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:28px 16px 60px;
+  }
+  .app{
+    width:100%;
+    max-width:480px;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    text-align:center;
+    margin-bottom:22px;
+  }
+  .lantern{
+    width:46px;
+    height:46px;
+    margin:0 auto 10px;
+    display:block;
+  }
+  .stamp{
+    position:absolute;
+    top:-4px;
+    right:6%;
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    border:2px solid var(--red);
+    color:var(--red);
+    font-family:'Noto Sans TC', sans-serif;
+    font-weight:900;
+    font-size:11px;
+    line-height:1.3;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    transform:rotate(-12deg);
+    opacity:0.82;
+    mix-blend-mode:multiply;
+  }
+  h1{
+    font-family:'Ma Shan Zheng', cursive;
+    font-weight:400;
+    font-size:46px;
+    letter-spacing:1px;
+    margin:0;
+    position:relative;
+    display:inline-block;
+    color:var(--ink);
+  }
+  h1::after{
+    content:'';
+    position:absolute;
+    left:8%;
+    right:8%;
+    bottom:-6px;
+    height:3px;
+    background:linear-gradient(90deg, transparent, var(--red), transparent);
+    opacity:0.7;
+  }
+  .subtitle{
+    margin-top:14px;
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    letter-spacing:2px;
+    color:var(--ink-dim);
+    text-transform:uppercase;
+  }
+
+  /* ---------- Category tabs ---------- */
+  .tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    margin-bottom:24px;
+  }
+  .tab{
+    font-family:'Noto Sans TC', sans-serif;
+    font-weight:700;
+    font-size:16px;
+    padding:8px 16px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--ink-dim);
+    cursor:pointer;
+    transition:all .18s ease;
+    user-select:none;
+  }
+  .tab:hover{ border-color:var(--gold); color:var(--ink); }
+  .tab.active{
+    background:var(--red);
+    border-color:var(--red);
+    color:#fff;
+    box-shadow:0 4px 14px rgba(168,52,31,0.3);
+  }
+  .tab .count{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    opacity:.75;
+    margin-left:4px;
+  }
+
+  /* ---------- Wheel ---------- */
+  .wheel-zone{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-bottom:18px;
+  }
+  .pointer{
+    width:0;
+    height:0;
+    border-left:11px solid transparent;
+    border-right:11px solid transparent;
+    border-top:18px solid var(--red);
+    filter:drop-shadow(0 2px 4px rgba(43,36,24,.35));
+    margin-bottom:-2px;
+    z-index:3;
+  }
+  .wheel-outer{
+    position:relative;
+    width:min(320px, 84vw);
+    height:min(320px, 84vw);
+    border-radius:50%;
+    background:var(--surface-2);
+    padding:10px;
+    box-shadow:0 0 0 2px var(--line), 0 18px 40px rgba(0,0,0,.45);
+  }
+  .wheel-hub{
+    position:absolute;
+    top:50%; left:50%;
+    width:46px; height:46px;
+    transform:translate(-50%,-50%);
+    background:var(--bg);
+    border:3px solid var(--gold);
+    border-radius:50%;
+    z-index:4;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+  }
+  #wheelCanvas{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    display:block;
+    transition:transform 3.4s cubic-bezier(.15,.65,.1,1);
+  }
+  .empty-wheel{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:var(--ink-dim);
+    font-size:13px;
+    padding:0 40px;
+  }
+
+  /* ---------- Spin button ---------- */
+  .spin-btn{
+    margin-top:22px;
+    font-family:'Noto Sans TC', sans-serif;
+    font-weight:700;
+    font-size:18px;
+    padding:14px 46px;
+    border-radius:999px;
+    border:none;
+    background:linear-gradient(180deg, var(--red), #7A2A18);
+    color:#fff;
+    cursor:pointer;
+    box-shadow:0 8px 22px rgba(168,52,31,.35);
+    transition:transform .12s ease, box-shadow .12s ease;
+    letter-spacing:1px;
+  }
+  .spin-btn:active{ transform:scale(.96); }
+  .spin-btn:disabled{
+    background:var(--surface-2);
+    color:var(--ink-dim);
+    box-shadow:none;
+    cursor:not-allowed;
+  }
+  .spin-caption{
+    font-family:'Space Mono', monospace;
+    font-size:10px;
+    letter-spacing:3px;
+    color:var(--ink-dim);
+    margin-top:8px;
+    text-transform:uppercase;
+  }
+
+  /* ---------- Result banner ---------- */
+  .result{
+    margin-top:26px;
+    text-align:center;
+    padding:18px 20px;
+    border-radius:14px;
+    background:var(--surface);
+    border:1px solid var(--gold);
+    box-shadow:0 0 24px rgba(185,132,42,.25);
+    display:none;
+  }
+  .result.show{ display:block; animation:glow 1.4s ease-out; }
+  @keyframes glow{
+    0%{ box-shadow:0 0 0 rgba(185,132,42,0); transform:scale(.92); opacity:0;}
+    60%{ box-shadow:0 0 36px rgba(185,132,42,.4); }
+    100%{ box-shadow:0 0 24px rgba(185,132,42,.25); transform:scale(1); opacity:1;}
+  }
+  .result-label{
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+    letter-spacing:2px;
+    color:var(--gold);
+    text-transform:uppercase;
+  }
+  .result-name{
+    font-family:'Noto Sans TC', sans-serif;
+    font-weight:900;
+    font-size:30px;
+    margin-top:6px;
+  }
+
+  /* ---------- Manage panel ---------- */
+  .manage-toggle{
+    display:block;
+    margin:34px auto 0;
+    background:none;
+    border:1px solid var(--line);
+    color:var(--ink-dim);
+    font-family:'Noto Sans TC', sans-serif;
+    font-size:15px;
+    padding:9px 18px;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .manage-toggle:hover{ border-color:var(--ink-dim); color:var(--ink); }
+  .manage-panel{
+    margin-top:16px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px;
+    display:none;
+  }
+  .manage-panel.show{ display:block; }
+  .manage-panel h2{
+    font-family:'Noto Sans TC', sans-serif;
+    font-size:17px;
+    font-weight:700;
+    margin:0 0 14px;
+    color:var(--ink);
+  }
+  .add-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:12px;
+  }
+  .add-row input{
+    flex:1;
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:8px;
+    color:var(--ink);
+    padding:10px 12px;
+    font-size:16px;
+    font-family:'Noto Sans TC', sans-serif;
+  }
+  .add-row input:focus{ outline:none; border-color:var(--gold); }
+  .cat-checks{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:12px;
+  }
+  .cat-check{
+    font-size:14px;
+    padding:5px 10px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:var(--bg-soft);
+    color:var(--ink-dim);
+    cursor:pointer;
+    user-select:none;
+  }
+  .cat-check.checked{
+    background:var(--green);
+    border-color:var(--green);
+    color:#fff;
+  }
+  .add-btn{
+    width:100%;
+    background:var(--gold);
+    color:#2B2418;
+    border:none;
+    border-radius:8px;
+    padding:10px;
+    font-weight:700;
+    font-size:16px;
+    cursor:pointer;
+    font-family:'Noto Sans TC', sans-serif;
+  }
+  .add-btn:disabled{ opacity:.4; cursor:not-allowed; }
+  .list{
+    margin-top:16px;
+    border-top:1px solid var(--line);
+    padding-top:12px;
+    max-height:260px;
+    overflow-y:auto;
+  }
+  .list-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:9px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .list-item:last-child{ border-bottom:none; }
+  .li-name{ font-size:17px; }
+  .li-tags{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    color:var(--ink-dim);
+    margin-top:3px;
+  }
+  .li-del{
+    background:none;
+    border:none;
+    color:var(--ink-dim);
+    font-size:22px;
+    cursor:pointer;
+    line-height:1;
+    padding:4px 8px;
+  }
+  .li-del:hover{ color:var(--red); }
+  .li-edit{
+    background:none;
+    border:none;
+    color:var(--ink-dim);
+    font-size:18px;
+    cursor:pointer;
+    line-height:1;
+    padding:4px 6px;
+  }
+  .li-edit:hover{ color:var(--gold); }
+  .li-actions{
+    display:flex;
+    align-items:center;
+    gap:2px;
+    flex-shrink:0;
+  }
+  .list-item.editing{
+    flex-direction:column;
+    align-items:stretch;
+    gap:8px;
+    background:var(--bg-soft);
+    border-radius:10px;
+    padding:12px;
+  }
+  .edit-row-actions{
+    display:flex;
+    gap:8px;
+  }
+  .edit-row-actions button{
+    flex:1;
+    border:none;
+    border-radius:8px;
+    padding:9px;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+    font-family:'Noto Sans TC', sans-serif;
+  }
+  .edit-save{ background:var(--gold); color:#2B2418; }
+  .edit-cancel{ background:var(--surface-2); color:var(--ink-dim); }
+  .empty-list{
+    text-align:center;
+    color:var(--ink-dim);
+    font-size:15px;
+    padding:14px 0;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header style="position:relative;">
+    <div class="stamp">嚴選<br>美味</div>
+    <svg class="lantern" viewBox="0 0 48 48" fill="none">
+      <circle cx="24" cy="24" r="19" fill="none" stroke="#A8341F" stroke-width="2.5" opacity="0.85"/>
+      <circle cx="24" cy="24" r="13" fill="none" stroke="#A8341F" stroke-width="1.4" opacity="0.6"/>
+      <text x="24" y="22" text-anchor="middle" font-family="'Noto Sans TC', sans-serif" font-weight="900" font-size="11" fill="#A8341F">今日</text>
+      <text x="24" y="33" text-anchor="middle" font-family="'Noto Sans TC', sans-serif" font-weight="900" font-size="11" fill="#A8341F">推薦</text>
+    </svg>
+    <h1>今天吃什麼</h1>
+    <div class="subtitle">挑類別 · 轉一圈 · 今晚交給天意</div>
+  </header>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="wheel-zone">
+    <div class="pointer"></div>
+    <div class="wheel-outer">
+      <canvas id="wheelCanvas" width="600" height="600"></canvas>
+      <div class="wheel-hub">🍴</div>
+      <div class="empty-wheel" id="emptyWheel" style="display:none;">這個類別還沒有餐廳<br>到下方「管理清單」新增一個吧</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;">
+    <button class="spin-btn" id="spinBtn">轉一下</button>
+    <div class="spin-caption">spin the wheel</div>
+  </div>
+
+  <div class="result" id="result">
+    <div class="result-label">今天就吃</div>
+    <div class="result-name" id="resultName">—</div>
+  </div>
+
+  <button class="manage-toggle" id="manageToggle">管理餐廳清單</button>
+  <div class="manage-panel" id="managePanel">
+    <h2>新增餐廳</h2>
+    <div class="add-row">
+      <input type="text" id="nameInput" placeholder="餐廳名稱,例如:鼎泰豐" maxlength="30">
+    </div>
+    <div class="cat-checks" id="catChecks"></div>
+    <button class="add-btn" id="addBtn">加入清單</button>
+
+    <h2 style="margin-top:18px;">目前清單</h2>
+    <div class="list" id="list"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const CATEGORIES = ['早餐','午餐','晚餐','甜點','宵夜','餐廳'];
+  const SEED = [
+    {id:1, name:'烤鴨', categories:['晚餐','餐廳']},
+    {id:2, name:'梁社漢排骨', categories:['午餐','晚餐']},
+    {id:3, name:'陽春麵', categories:['早餐','午餐','晚餐']},
+    {id:4, name:'魷魚羹麵', categories:['午餐','晚餐']},
+    {id:5, name:'蔥抓餅', categories:['早餐']},
+    {id:6, name:'雞絲麵、廣東粥', categories:['早餐']},
+    {id:7, name:'鹽酥雞', categories:['晚餐','宵夜']},
+    {id:8, name:'紅豆媽媽', categories:['甜點']},
+    {id:9, name:'碗糕、擔仔麵', categories:['午餐','晚餐']},
+    {id:10, name:'義大利麵', categories:['午餐','晚餐','餐廳']},
+    {id:11, name:'牛肉麵(中港、新泰、森豐)', categories:['午餐','晚餐']},
+    {id:12, name:'豬腸冬粉', categories:['午餐','晚餐']},
+    {id:13, name:'蚵仔麵線、臭豆腐', categories:['午餐','晚餐','宵夜']},
+    {id:14, name:'麻油麵線', categories:['晚餐','宵夜']},
+    {id:15, name:'香香鹵味', categories:['宵夜']},
+    {id:16, name:'土魠魚麵', categories:['早餐','午餐']},
+    {id:17, name:'鴨肉羹麵', categories:['午餐','晚餐']},
+    {id:18, name:'牛排', categories:['晚餐','餐廳']},
+    {id:19, name:'鐵板燒', categories:['晚餐','餐廳']},
+    {id:20, name:'胖老爹', categories:['午餐','晚餐','宵夜']},
+    {id:21, name:'中華麵攤(麻醬麵)', categories:['午餐','晚餐']},
+    {id:22, name:'鴨肉麵(正忠排骨酥)', categories:['午餐','晚餐']},
+    {id:23, name:'溪仔邊烤肉', categories:['晚餐','餐廳']},
+    {id:24, name:'肉粥(黃昏市場)', categories:['晚餐','宵夜']},
+    {id:25, name:'雞肉飯、紅燒鰻', categories:['午餐','晚餐']},
+    {id:26, name:'好吃雞肉', categories:['午餐','晚餐']},
+    {id:27, name:'魯肉便當', categories:['午餐','晚餐']},
+    {id:28, name:'武廟肉羹', categories:['早餐','午餐']},
+    {id:29, name:'八方雲集', categories:['午餐','晚餐','宵夜']},
+    {id:30, name:'麻辣豆腐', categories:['晚餐']},
+    {id:31, name:'炒麵(飯)', categories:['午餐','晚餐']},
+    {id:32, name:'虱目魚粥', categories:['早餐','午餐']},
+    {id:33, name:'辣炒年糕', categories:['午餐','晚餐','宵夜']},
+    {id:34, name:'排骨酥麵', categories:['午餐','晚餐']},
+    {id:35, name:'肯德基', categories:['午餐','晚餐','宵夜','餐廳']},
+    {id:36, name:'麥當勞', categories:['早餐','午餐','晚餐','宵夜']},
+    {id:37, name:'必勝客', categories:['午餐','晚餐','餐廳']},
+    {id:38, name:'砂鍋粥', categories:['晚餐','宵夜']}
+  ];
+
+  let restaurants = [];
+  let activeCategory = 'all';
+  let rotation = 0;
+  let spinning = false;
+  let pendingChecks = new Set();
+  let editingId = null;
+  let editPendingChecks = new Set();
+
+  const tabsEl = document.getElementById('tabs');
+  const listEl = document.getElementById('list');
+  const catChecksEl = document.getElementById('catChecks');
+  const canvas = document.getElementById('wheelCanvas');
+  const ctx = canvas.getContext('2d');
+  const spinBtn = document.getElementById('spinBtn');
+  const resultEl = document.getElementById('result');
+  const resultNameEl = document.getElementById('resultName');
+  const emptyWheelEl = document.getElementById('emptyWheel');
+  const manageToggle = document.getElementById('manageToggle');
+  const managePanel = document.getElementById('managePanel');
+  const nameInput = document.getElementById('nameInput');
+  const addBtn = document.getElementById('addBtn');
+
+  const SEGMENT_FILLS = ['#F7F0DD', '#EBE0C2'];
+  const SEGMENT_BORDERS = ['#A8341F', '#B9842A', '#5C6E3F'];
+
+  async function loadData(){
+    try{
+      const raw = localStorage.getItem('restaurants_v2');
+      restaurants = raw ? JSON.parse(raw) : SEED;
+    }catch(e){
+      restaurants = SEED;
+    }
+    if(!restaurants || restaurants.length === 0){
+      restaurants = SEED;
+    }
+    await saveData();
+    renderAll();
+  }
+
+  async function saveData(){
+    try{
+      localStorage.setItem('restaurants_v2', JSON.stringify(restaurants));
+    }catch(e){
+      console.error('儲存失敗', e);
+    }
+  }
+
+  function getFiltered(){
+    if(activeCategory === 'all') return restaurants;
+    return restaurants.filter(r => r.categories.includes(activeCategory));
+  }
+
+  function renderTabs(){
+    const all = [{key:'all', label:'全部'}].concat(CATEGORIES.map(c => ({key:c, label:c})));
+    tabsEl.innerHTML = '';
+    all.forEach(c => {
+      const count = c.key === 'all' ? restaurants.length : restaurants.filter(r=>r.categories.includes(c.key)).length;
+      const btn = document.createElement('div');
+      btn.className = 'tab' + (activeCategory === c.key ? ' active' : '');
+      btn.innerHTML = c.label + '<span class="count">' + count + '</span>';
+      btn.onclick = () => {
+        if(spinning) return;
+        activeCategory = c.key;
+        resetResult();
+        renderAll();
+      };
+      tabsEl.appendChild(btn);
+    });
+  }
+
+  function renderCatChecks(){
+    catChecksEl.innerHTML = '';
+    CATEGORIES.forEach(c => {
+      const el = document.createElement('div');
+      el.className = 'cat-check' + (pendingChecks.has(c) ? ' checked' : '');
+      el.textContent = c;
+      el.onclick = () => {
+        if(pendingChecks.has(c)) pendingChecks.delete(c); else pendingChecks.add(c);
+        renderCatChecks();
+        updateAddBtn();
+      };
+      catChecksEl.appendChild(el);
+    });
+  }
+
+  function updateAddBtn(){
+    addBtn.disabled = !(nameInput.value.trim().length > 0 && pendingChecks.size > 0);
+  }
+
+  function renderList(){
+    listEl.innerHTML = '';
+    if(restaurants.length === 0){
+      listEl.innerHTML = '<div class="empty-list">清單是空的,新增一間餐廳開始吧</div>';
+      return;
+    }
+    restaurants.forEach(r => {
+      const row = document.createElement('div');
+
+      if(editingId === r.id){
+        row.className = 'list-item editing';
+
+        const nameInputEl = document.createElement('input');
+        nameInputEl.type = 'text';
+        nameInputEl.value = r.name;
+        nameInputEl.maxLength = 30;
+        nameInputEl.placeholder = '餐廳名稱';
+
+        const catsWrap = document.createElement('div');
+        catsWrap.className = 'cat-checks';
+        CATEGORIES.forEach(c => {
+          const chip = document.createElement('div');
+          chip.className = 'cat-check' + (editPendingChecks.has(c) ? ' checked' : '');
+          chip.textContent = c;
+          chip.onclick = () => {
+            if(editPendingChecks.has(c)) editPendingChecks.delete(c); else editPendingChecks.add(c);
+            renderList();
+          };
+          catsWrap.appendChild(chip);
+        });
+
+        const actions = document.createElement('div');
+        actions.className = 'edit-row-actions';
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'edit-save';
+        saveBtn.textContent = '儲存';
+        saveBtn.onclick = () => saveEdit(r.id, nameInputEl.value);
+        const cancelBtn = document.createElement('button');
+        cancelBtn.className = 'edit-cancel';
+        cancelBtn.textContent = '取消';
+        cancelBtn.onclick = cancelEdit;
+        actions.appendChild(saveBtn);
+        actions.appendChild(cancelBtn);
+
+        row.appendChild(nameInputEl);
+        row.appendChild(catsWrap);
+        row.appendChild(actions);
+      } else {
+        row.className = 'list-item';
+        row.innerHTML =
+          '<div><div class="li-name">' + escapeHtml(r.name) + '</div>' +
+          '<div class="li-tags">' + r.categories.join(' / ') + '</div></div>' +
+          '<div class="li-actions">' +
+          '<button class="li-edit" data-id="' + r.id + '">✎</button>' +
+          '<button class="li-del" data-id="' + r.id + '">×</button>' +
+          '</div>';
+        row.querySelector('.li-edit').onclick = () => startEdit(r);
+        row.querySelector('.li-del').onclick = () => removeRestaurant(r.id);
+      }
+      listEl.appendChild(row);
+    });
+  }
+
+  function startEdit(r){
+    editingId = r.id;
+    editPendingChecks = new Set(r.categories);
+    renderList();
+  }
+
+  function cancelEdit(){
+    editingId = null;
+    editPendingChecks = new Set();
+    renderList();
+  }
+
+  async function saveEdit(id, newName){
+    const name = newName.trim();
+    if(!name || editPendingChecks.size === 0) return;
+    restaurants = restaurants.map(r => r.id === id ? {...r, name, categories:Array.from(editPendingChecks)} : r);
+    editingId = null;
+    editPendingChecks = new Set();
+    await saveData();
+    resetResult();
+    renderAll();
+  }
+
+  function escapeHtml(s){
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  async function removeRestaurant(id){
+    restaurants = restaurants.filter(r => r.id !== id);
+    await saveData();
+    resetResult();
+    renderAll();
+  }
+
+  async function addRestaurant(){
+    const name = nameInput.value.trim();
+    if(!name || pendingChecks.size === 0) return;
+    const newId = Date.now();
+    restaurants.push({id:newId, name, categories:Array.from(pendingChecks)});
+    await saveData();
+    nameInput.value = '';
+    pendingChecks.clear();
+    renderCatChecks();
+    updateAddBtn();
+    resetResult();
+    renderAll();
+  }
+
+  function resetResult(){
+    resultEl.classList.remove('show');
+    rotation = 0;
+    canvas.style.transition = 'none';
+    canvas.style.transform = 'rotate(0deg)';
+    requestAnimationFrame(() => { canvas.style.transition = 'transform 3.4s cubic-bezier(.15,.65,.1,1)'; });
+  }
+
+  function drawWheel(){
+    const filtered = getFiltered();
+    const w = canvas.width, h = canvas.height;
+    const cx = w/2, cy = h/2, r = w/2 - 6;
+    ctx.clearRect(0,0,w,h);
+
+    if(filtered.length === 0){
+      emptyWheelEl.style.display = 'flex';
+      spinBtn.disabled = true;
+      return;
+    }
+    emptyWheelEl.style.display = 'none';
+    spinBtn.disabled = false;
+
+    const seg = (Math.PI*2) / filtered.length;
+    filtered.forEach((rest, i) => {
+      const start = i*seg, end = start+seg;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, start, end);
+      ctx.closePath();
+      ctx.fillStyle = SEGMENT_FILLS[i % SEGMENT_FILLS.length];
+      ctx.fill();
+      ctx.strokeStyle = SEGMENT_BORDERS[i % SEGMENT_BORDERS.length];
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(start + seg/2);
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      let maxChars = 10;
+      let fontSize = 30;
+      if(filtered.length > 4){ maxChars = 8; fontSize = 26; }
+      if(filtered.length > 8){ maxChars = 6; fontSize = 22; }
+      if(filtered.length > 12){ maxChars = 5; fontSize = 18; }
+      ctx.font = '900 ' + fontSize + 'px "Noto Sans TC", sans-serif';
+      let label = rest.name;
+      if(label.length > maxChars) label = label.slice(0, maxChars-1) + '…';
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = 'rgba(247,240,221,0.85)';
+      ctx.lineJoin = 'round';
+      ctx.strokeText(label, r - 20, 0);
+      ctx.fillStyle = '#2B2418';
+      ctx.fillText(label, r - 20, 0);
+      ctx.restore();
+    });
+  }
+
+  function spin(){
+    const filtered = getFiltered();
+    if(filtered.length === 0 || spinning) return;
+    spinning = true;
+    spinBtn.disabled = true;
+    resultEl.classList.remove('show');
+
+    const segDeg = 360 / filtered.length;
+    const winnerIndex = Math.floor(Math.random() * filtered.length);
+    const jitter = (Math.random() - 0.5) * segDeg * 0.6;
+    const midAngleDeg = (winnerIndex * segDeg + segDeg/2 + jitter);
+    let targetMod = (270 - midAngleDeg) % 360;
+    if(targetMod < 0) targetMod += 360;
+
+    const spins = 5 + Math.floor(Math.random()*3);
+    const currentMod = ((rotation % 360) + 360) % 360;
+    let delta = targetMod - currentMod;
+    if(delta <= 0) delta += 360;
+    rotation = rotation + delta + 360*spins;
+
+    canvas.style.transform = 'rotate(' + rotation + 'deg)';
+
+    setTimeout(() => {
+      spinning = false;
+      spinBtn.disabled = false;
+      const winner = filtered[winnerIndex];
+      resultNameEl.textContent = winner.name;
+      resultEl.classList.add('show');
+    }, 3500);
+  }
+
+  function renderAll(){
+    renderTabs();
+    renderList();
+    drawWheel();
+  }
+
+  manageToggle.onclick = () => {
+    managePanel.classList.toggle('show');
+    manageToggle.textContent = managePanel.classList.contains('show') ? '收起清單管理' : '管理餐廳清單';
+  };
+  nameInput.oninput = updateAddBtn;
+  addBtn.onclick = addRestaurant;
+  spinBtn.onclick = spin;
+
+  renderCatChecks();
+  updateAddBtn();
+  loadData();
+})();
+</script>
+</body>
+</html>
