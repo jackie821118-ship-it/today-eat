@@ -87,17 +87,17 @@ text-align:center;color:#9B8E94;font-size:12px;padding:0 24px;
 .spin-btn{
 position:absolute;top:50%;left:50%;
 transform:translate(-50%,-50%);
-width:46px;height:46px;border-radius:50%;
-border:3px solid #E2486A;background:#fff;
-color:#E2486A;font-family:Zen Maru Gothic,sans-serif;font-weight:900;font-size:13px;
+width:54px;height:54px;border-radius:50%;
+border:none;background:#E2486A;
+color:#fff;font-family:Zen Maru Gothic,sans-serif;font-weight:900;font-size:14px;
 cursor:pointer;z-index:4;
 display:flex;align-items:center;justify-content:center;
-box-shadow:0 2px 6px rgba(226,72,106,0.35);
-transition:transform .1s,background .1s;
-letter-spacing:0;padding:0;
+box-shadow:0 4px 0 #A4203F;
+transition:transform .1s,box-shadow .1s;
+letter-spacing:1px;padding:0;
 }
-.spin-btn:active{transform:translate(-50%,-50%) scale(.92);}
-.spin-btn:disabled{background:#FFF3EC;color:#9B8E94;border-color:#ccc;cursor:not-allowed;box-shadow:none;}
+.spin-btn:active{transform:translate(-50%,-50%) translateY(3px);box-shadow:0 1px 0 #A4203F;}
+.spin-btn:disabled{background:#FFF3EC;color:#9B8E94;border:none;box-shadow:0 4px 0 rgba(74,63,70,0.1);cursor:not-allowed;}
 
 .result{
 margin-top:10px;border-radius:14px;background:#fff;
@@ -205,7 +205,7 @@ function buildUI(){
       <div class="pointer"></div>
       <div class="wheel-outer">
         <canvas id="wheelCanvas" width="600" height="600"></canvas>
-        <button class="spin-btn" id="spinBtn">轉</button>
+        <button class="spin-btn" id="spinBtn">轉一下</button>
         <div class="empty-wheel" id="emptyWheel" style="display:none;">這個條件沒有餐廳</div>
       </div>
     </div>
