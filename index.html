@@ -77,11 +77,7 @@ width:min(230px,58vw);height:min(230px,58vw);
 border-radius:50%;background:#fff;padding:7px;
 box-shadow:0 0 0 4px #fff,0 0 0 7px #FFD166,0 8px 20px rgba(74,63,70,.18);
 }
-.wheel-hub{
-position:absolute;top:50%;left:50%;width:34px;height:34px;
-transform:translate(-50%,-50%);background:#fff;border:3px solid #E2486A;
-border-radius:50%;z-index:4;display:flex;align-items:center;justify-content:center;font-size:14px;
-}
+.wheel-hub{display:none;}
 #wheelCanvas{width:100%;height:100%;border-radius:50%;display:block;transition:transform 3.4s cubic-bezier(.15,.65,.1,1);}
 .empty-wheel{
 position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
@@ -89,13 +85,19 @@ text-align:center;color:#9B8E94;font-size:12px;padding:0 24px;
 }
 
 .spin-btn{
-margin-top:10px;font-family:Zen Maru Gothic,sans-serif;font-weight:900;font-size:16px;
-padding:10px 40px;border-radius:999px;border:none;background:#E2486A;color:#fff;
-cursor:pointer;box-shadow:0 4px 0 #A4203F;transition:transform .1s,box-shadow .1s;letter-spacing:2px;
+position:absolute;top:50%;left:50%;
+transform:translate(-50%,-50%);
+width:46px;height:46px;border-radius:50%;
+border:3px solid #E2486A;background:#fff;
+color:#E2486A;font-family:Zen Maru Gothic,sans-serif;font-weight:900;font-size:13px;
+cursor:pointer;z-index:4;
+display:flex;align-items:center;justify-content:center;
+box-shadow:0 2px 6px rgba(226,72,106,0.35);
+transition:transform .1s,background .1s;
+letter-spacing:0;padding:0;
 }
-.spin-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #A4203F;}
-.spin-btn:disabled{background:#FFF3EC;color:#9B8E94;box-shadow:0 4px 0 rgba(74,63,70,0.1);cursor:not-allowed;}
-.spin-caption{font-family:Zen Maru Gothic,sans-serif;font-size:9px;letter-spacing:2px;color:#9B8E94;margin-top:5px;}
+.spin-btn:active{transform:translate(-50%,-50%) scale(.92);}
+.spin-btn:disabled{background:#FFF3EC;color:#9B8E94;border-color:#ccc;cursor:not-allowed;box-shadow:none;}
 
 .result{
 margin-top:10px;border-radius:14px;background:#fff;
@@ -114,7 +116,6 @@ border:3px dashed #8AD1B8;box-shadow:0 4px 0 rgba(138,209,184,0.3);display:none;
 flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;
 font-family:Zen Maru Gothic,sans-serif;font-weight:700;text-decoration:none;
 }
-.btn-map{background:#FFD166;color:#4A3F46;}
 .btn-web{background:#C9B6F2;color:#4A3F46;}
 
 .error{text-align:center;padding:20px;color:#E2486A;font-size:13px;}
@@ -125,7 +126,7 @@ font-family:Zen Maru Gothic,sans-serif;font-weight:700;text-decoration:none;
 <div class="app">
   <header>
     <h1>🍜 今天吃什麼 🍙</h1>
-    <div class="subtitle">挑地點 · 挑類型 · 轉一圈</div>
+
   </header>
 
   <div id="mainContent">
@@ -180,9 +181,14 @@ async function fetchSheet(gid, loc){
 
 async function loadAll(){
   try {
+    let allRows = [];
     for(const tab of SHEET_TABS){
-      DATA[tab.loc] = await fetchSheet(tab.gid);
+      const rows = await fetchSheet(tab.gid, tab.loc);
+      allRows = allRows.concat(rows);
     }
+    // 用 loc 欄位分開存，確保不會混
+    DATA['新莊'] = allRows.filter(r => r.loc === '新莊');
+    DATA['新埔'] = allRows.filter(r => r.loc === '新埔');
     buildUI();
   } catch(e) {
     document.getElementById('mainContent').innerHTML =
@@ -199,18 +205,15 @@ function buildUI(){
       <div class="pointer"></div>
       <div class="wheel-outer">
         <canvas id="wheelCanvas" width="600" height="600"></canvas>
-        <div class="wheel-hub">🍴</div>
+        <button class="spin-btn" id="spinBtn">轉</button>
         <div class="empty-wheel" id="emptyWheel" style="display:none;">這個條件沒有餐廳</div>
       </div>
     </div>
-    <div style="text-align:center;">
-      <button class="spin-btn" id="spinBtn">轉一下</button>
-      <div class="spin-caption">spin the wheel</div>
-    </div>
+
     <div class="result" id="result">
       <div class="result-header">
         <span class="result-label">今天就吃</span>
-        <span class="result-name" id="resultName">—</span>
+        <span class="result-name" id="resultName"></span>
       </div>
       <div class="result-body" id="resultBody"></div>
     </div>`;
@@ -335,15 +338,14 @@ function spin(){
     const winner=pool[wi];
     const nameEl=document.getElementById('resultName');
     const bodyEl=document.getElementById('resultBody');
-    if(nameEl) nameEl.textContent=winner.name;
+    if(nameEl){
+      if(winner.map) nameEl.innerHTML='<a href="'+winner.map+'" target="_blank" style="color:#4A3F46;text-decoration:underline;text-decoration-color:#FFD166;">'+winner.name+'</a>';
+      else nameEl.textContent=winner.name;
+    }
     if(bodyEl){
       let html='';
-      if(winner.hours) html+='<div class="result-row"><span class="icon">🕐</span><span>'+winner.hours+'</span></div>';
-      if(winner.phone) html+='<div class="result-row"><span class="icon">📞</span><span>'+winner.phone+'</span></div>';
-      html+='<div class="result-links">';
-      if(winner.map) html+='<a class="btn-map" href="'+winner.map+'" target="_blank">📍 地圖</a>';
-      if(winner.website) html+='<a class="btn-web" href="'+winner.website+'" target="_blank">🔗 官網</a>';
-      html+='</div>';
+      if(winner.hours||winner.phone) html+='<div class="result-row"><span class="icon">🕐</span><span>'+(winner.hours||'')+(winner.hours&&winner.phone?' ':'')+(winner.phone?'📞 '+winner.phone:'')+'</span></div>';
+      if(winner.website) html+='<div class="result-links"><a class="btn-web" href="'+winner.website+'" target="_blank">🔗 官網</a></div>';
       bodyEl.innerHTML=html;
     }
     if(resultEl) resultEl.classList.add('show');
