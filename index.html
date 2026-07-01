@@ -14,210 +14,110 @@
     background:
       linear-gradient(rgba(165,200,255,0.10) 1px, transparent 1px),
       linear-gradient(90deg, rgba(165,200,255,0.10) 1px, transparent 1px),
-      radial-gradient(circle at 15% 10%, rgba(255,143,163,0.10) 0%, transparent 35%),
-      radial-gradient(circle at 85% 90%, rgba(138,209,184,0.12) 0%, transparent 38%),
       #FFF7F0;
-    background-size: 26px 26px, 26px 26px, 100% 100%, 100% 100%, 100% 100%;
+    background-size:26px 26px, 26px 26px;
     color:#4A3F46;
     font-family:Noto Sans TC, sans-serif;
     min-height:100vh;
     display:flex;
     justify-content:center;
-    padding:14px 14px 18px;
+    padding:10px 12px 16px;
   }
-  .app{
-    width:100%;
-    max-width:480px;
-  }
+  .app{width:100%;max-width:480px;}
 
-/* ––––– Header ––––– */
-header{
-text-align:center;
-margin-bottom:10px;
+/* Loading */
+.loading{
+text-align:center;padding:60px 20px;
+font-family:Zen Maru Gothic,sans-serif;font-weight:700;font-size:16px;color:#9B8E94;
 }
-h1{
-font-family:Zen Maru Gothic, sans-serif;
-font-weight:900;
-font-size:32px;
-letter-spacing:1px;
-margin:0;
-color:#4A3F46;
-}
+.loading-dot{display:inline-block;animation:blink 1.2s infinite;}
+.loading-dot:nth-child(2){animation-delay:.2s;}
+.loading-dot:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,80%,100%{opacity:.2;}40%{opacity:1;}}
+
+header{text-align:center;margin-bottom:8px;}
+h1{font-family:Zen Maru Gothic,sans-serif;font-weight:900;font-size:28px;margin:0;color:#4A3F46;}
 .subtitle{
-margin-top:6px;
-display:inline-block;
-font-family:Zen Maru Gothic, sans-serif;
-font-weight:700;
-font-size:12px;
-letter-spacing:1px;
-color:#4A3F46;
-background:#FFD166;
-padding:4px 12px;
-border-radius:999px;
+margin-top:5px;display:inline-block;
+font-family:Zen Maru Gothic,sans-serif;font-weight:700;font-size:11px;
+color:#4A3F46;background:#FFD166;padding:3px 10px;border-radius:999px;
 box-shadow:0 2px 0 rgba(74,63,70,0.12);
 }
 
-/* ––––– Category tabs ––––– */
-.tabs{
-display:flex;
-flex-wrap:wrap;
-gap:6px;
-justify-content:center;
-margin-bottom:12px;
+.loc-tabs{display:flex;gap:6px;justify-content:center;margin-bottom:7px;}
+.loc-tab{
+font-family:Zen Maru Gothic,sans-serif;font-weight:700;font-size:13px;
+padding:5px 16px;border-radius:999px;border:2px solid rgba(74,63,70,0.15);
+background:#fff;color:#4A3F46;cursor:pointer;
+box-shadow:0 2px 0 rgba(74,63,70,0.1);transition:all .15s;
 }
-.tab{
-font-family:Zen Maru Gothic, sans-serif;
-font-weight:700;
-font-size:14px;
-padding:6px 13px;
-border-radius:999px;
-border:2px solid rgba(74,63,70,0.12);
-background:#FFFFFF;
-color:#4A3F46;
-cursor:pointer;
-transition:all .15s ease;
-user-select:none;
-box-shadow:0 2px 0 rgba(74,63,70,0.1);
-}
-.tab:hover{ border-color:#FFD166; }
-.tab.active{
-background:#E2486A;
-border-color:#E2486A;
-color:#fff;
-box-shadow:0 2px 0 #A4203F;
-transform:translateY(1px);
-}
-.tab .count{
-font-family:Zen Maru Gothic, sans-serif;
-font-weight:700;
-font-size:11px;
-opacity:.8;
-margin-left:3px;
-}
+.loc-tab.active{background:#A5C8FF;border-color:#A5C8FF;color:#fff;box-shadow:0 2px 0 #6A9FD4;transform:translateY(1px);}
 
-/* ––––– Wheel ––––– */
-.wheel-zone{
-position:relative;
-display:flex;
-flex-direction:column;
-align-items:center;
-margin-bottom:8px;
+.tabs{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:10px;}
+.tab{
+font-family:Zen Maru Gothic,sans-serif;font-weight:700;font-size:13px;
+padding:5px 12px;border-radius:999px;border:2px solid rgba(74,63,70,0.12);
+background:#fff;color:#4A3F46;cursor:pointer;
+box-shadow:0 2px 0 rgba(74,63,70,0.1);transition:all .15s;user-select:none;
 }
+.tab.active{background:#E2486A;border-color:#E2486A;color:#fff;box-shadow:0 2px 0 #A4203F;transform:translateY(1px);}
+.tab .count{font-size:10px;opacity:.8;margin-left:2px;}
+
+.wheel-zone{position:relative;display:flex;flex-direction:column;align-items:center;margin-bottom:6px;}
 .pointer{
-width:0;
-height:0;
-border-left:10px solid transparent;
-border-right:10px solid transparent;
-border-top:16px solid #E2486A;
+width:0;height:0;
+border-left:9px solid transparent;border-right:9px solid transparent;
+border-top:14px solid #E2486A;
 filter:drop-shadow(0 2px 3px rgba(74,63,70,.25));
-margin-bottom:-2px;
-z-index:3;
+margin-bottom:-2px;z-index:3;
 }
 .wheel-outer{
 position:relative;
-width:min(248px, 62vw);
-height:min(248px, 62vw);
-border-radius:50%;
-background:#FFFFFF;
-padding:8px;
-box-shadow:0 0 0 4px #fff, 0 0 0 7px #FFD166, 0 10px 22px rgba(74,63,70,.18);
+width:min(230px,58vw);height:min(230px,58vw);
+border-radius:50%;background:#fff;padding:7px;
+box-shadow:0 0 0 4px #fff,0 0 0 7px #FFD166,0 8px 20px rgba(74,63,70,.18);
 }
 .wheel-hub{
-position:absolute;
-top:50%; left:50%;
-width:38px; height:38px;
-transform:translate(-50%,-50%);
-background:#fff;
-border:3px solid #E2486A;
-border-radius:50%;
-z-index:4;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:15px;
+position:absolute;top:50%;left:50%;width:34px;height:34px;
+transform:translate(-50%,-50%);background:#fff;border:3px solid #E2486A;
+border-radius:50%;z-index:4;display:flex;align-items:center;justify-content:center;font-size:14px;
 }
-#wheelCanvas{
-width:100%;
-height:100%;
-border-radius:50%;
-display:block;
-transition:transform 3.4s cubic-bezier(.15,.65,.1,1);
-}
+#wheelCanvas{width:100%;height:100%;border-radius:50%;display:block;transition:transform 3.4s cubic-bezier(.15,.65,.1,1);}
 .empty-wheel{
-position:absolute;
-inset:0;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
-color:#9B8E94;
-font-size:12px;
-padding:0 30px;
+position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+text-align:center;color:#9B8E94;font-size:12px;padding:0 24px;
 }
 
-/* ––––– Spin button ––––– */
 .spin-btn{
-margin-top:12px;
-font-family:Zen Maru Gothic, sans-serif;
-font-weight:900;
-font-size:17px;
-padding:11px 42px;
-border-radius:999px;
-border:none;
-background:#E2486A;
-color:#fff;
-cursor:pointer;
-box-shadow:0 4px 0 #A4203F;
-transition:transform .1s ease, box-shadow .1s ease;
-letter-spacing:2px;
+margin-top:10px;font-family:Zen Maru Gothic,sans-serif;font-weight:900;font-size:16px;
+padding:10px 40px;border-radius:999px;border:none;background:#E2486A;color:#fff;
+cursor:pointer;box-shadow:0 4px 0 #A4203F;transition:transform .1s,box-shadow .1s;letter-spacing:2px;
 }
-.spin-btn:active{ transform:translateY(3px); box-shadow:0 1px 0 #A4203F; }
-.spin-btn:disabled{
-background:#FFF3EC;
-color:#9B8E94;
-box-shadow:0 4px 0 rgba(74,63,70,0.1);
-cursor:not-allowed;
-}
-.spin-caption{
-font-family:Zen Maru Gothic, sans-serif;
-font-weight:500;
-font-size:10px;
-letter-spacing:2px;
-color:#9B8E94;
-margin-top:6px;
-}
+.spin-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #A4203F;}
+.spin-btn:disabled{background:#FFF3EC;color:#9B8E94;box-shadow:0 4px 0 rgba(74,63,70,0.1);cursor:not-allowed;}
+.spin-caption{font-family:Zen Maru Gothic,sans-serif;font-size:9px;letter-spacing:2px;color:#9B8E94;margin-top:5px;}
 
-/* ––––– Result banner ––––– */
 .result{
-margin-top:12px;
-text-align:center;
-padding:12px;
-border-radius:16px;
-background:#FFFFFF;
-border:3px dashed #8AD1B8;
-box-shadow:0 4px 0 rgba(138,209,184,0.3);
-display:none;
+margin-top:10px;border-radius:14px;background:#fff;
+border:3px dashed #8AD1B8;box-shadow:0 4px 0 rgba(138,209,184,0.3);display:none;overflow:hidden;
 }
-.result.show{ display:block; animation:glow 1.2s ease-out; }
-@keyframes glow{
-0%{ transform:scale(.85) rotate(-2deg); opacity:0;}
-50%{ transform:scale(1.04) rotate(1deg); }
-100%{ transform:scale(1) rotate(0deg); opacity:1;}
+.result.show{display:block;animation:pop .8s ease-out;}
+@keyframes pop{0%{transform:scale(.88);opacity:0;}60%{transform:scale(1.03);}100%{transform:scale(1);opacity:1;}}
+.result-header{background:#DFF3EA;padding:8px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.result-label{font-family:Zen Maru Gothic,sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;color:#4FA988;}
+.result-name{font-family:Zen Maru Gothic,sans-serif;font-weight:900;font-size:18px;color:#4A3F46;}
+.result-body{padding:8px 12px;display:flex;flex-direction:column;gap:4px;}
+.result-row{display:flex;align-items:flex-start;gap:6px;font-size:12px;color:#4A3F46;}
+.result-row .icon{flex-shrink:0;width:16px;text-align:center;}
+.result-links{display:flex;gap:6px;margin-top:4px;}
+.result-links a{
+flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;
+font-family:Zen Maru Gothic,sans-serif;font-weight:700;text-decoration:none;
 }
-.result-label{
-font-family:Zen Maru Gothic, sans-serif;
-font-weight:700;
-font-size:12px;
-letter-spacing:2px;
-color:#4FA988;
-}
-.result-name{
-font-family:Zen Maru Gothic, sans-serif;
-font-weight:900;
-font-size:24px;
-margin-top:4px;
-color:#4A3F46;
-}
+.btn-map{background:#FFD166;color:#4A3F46;}
+.btn-web{background:#C9B6F2;color:#4A3F46;}
+
+.error{text-align:center;padding:20px;color:#E2486A;font-size:13px;}
 </style>
 
 </head>
@@ -225,212 +125,242 @@ color:#4A3F46;
 <div class="app">
   <header>
     <h1>🍜 今天吃什麼 🍙</h1>
-    <div class="subtitle">挑類別 · 轉一圈 · 今晚交給天意</div>
+    <div class="subtitle">挑地點 · 挑類型 · 轉一圈</div>
   </header>
 
-  <div class="tabs" id="tabs"></div>
-
-  <div class="wheel-zone">
-    <div class="pointer"></div>
-    <div class="wheel-outer">
-      <canvas id="wheelCanvas" width="600" height="600"></canvas>
-      <div class="wheel-hub">🍴</div>
-      <div class="empty-wheel" id="emptyWheel" style="display:none;">這個類別沒有餐廳</div>
+  <div id="mainContent">
+    <div class="loading">
+      載入中<span class="loading-dot">.</span><span class="loading-dot">.</span><span class="loading-dot">.</span>
     </div>
-  </div>
-
-  <div style="text-align:center;">
-    <button class="spin-btn" id="spinBtn">轉一下</button>
-    <div class="spin-caption">spin the wheel</div>
-  </div>
-
-  <div class="result" id="result">
-    <div class="result-label">今天就吃</div>
-    <div class="result-name" id="resultName">—</div>
   </div>
 </div>
 
 <script>
 (function(){
-  const CATEGORIES = ['早餐','午餐','晚餐','甜點','宵夜','餐廳'];
 
-  // 餐廳名單直接寫在這裡。每筆是 {name: 名稱, categories: [類別,...]}
-  // 要新增/修改餐廳,直接編輯下面這個陣列就好。
-  const restaurants = [
-    {name:'烤鴨', categories:['晚餐','餐廳']},
-    {name:'梁社漢排骨', categories:['午餐','晚餐']},
-    {name:'陽春麵', categories:['早餐','午餐','晚餐']},
-    {name:'魷魚羹麵', categories:['午餐','晚餐']},
-    {name:'蔥抓餅', categories:['早餐']},
-    {name:'雞絲麵、廣東粥', categories:['早餐']},
-    {name:'鹽酥雞', categories:['晚餐','宵夜']},
-    {name:'紅豆媽媽', categories:['甜點']},
-    {name:'碗糕、擔仔麵', categories:['午餐','晚餐']},
-    {name:'義大利麵', categories:['午餐','晚餐','餐廳']},
-    {name:'牛肉麵(中港、新泰、森豐)', categories:['午餐','晚餐']},
-    {name:'豬腸冬粉', categories:['午餐','晚餐']},
-    {name:'蚵仔麵線、臭豆腐', categories:['午餐','晚餐','宵夜']},
-    {name:'麻油麵線', categories:['晚餐','宵夜']},
-    {name:'香香鹵味', categories:['宵夜']},
-    {name:'土魠魚麵', categories:['早餐','午餐']},
-    {name:'鴨肉羹麵', categories:['午餐','晚餐']},
-    {name:'牛排', categories:['晚餐','餐廳']},
-    {name:'鐵板燒', categories:['晚餐','餐廳']},
-    {name:'胖老爹', categories:['午餐','晚餐','宵夜']},
-    {name:'中華麵攤(麻醬麵)', categories:['午餐','晚餐']},
-    {name:'鴨肉麵(正忠排骨酥)', categories:['午餐','晚餐']},
-    {name:'溪仔邊烤肉', categories:['晚餐','餐廳']},
-    {name:'肉粥(黃昏市場)', categories:['晚餐','宵夜']},
-    {name:'雞肉飯、紅燒鰻', categories:['午餐','晚餐']},
-    {name:'好吃雞肉', categories:['午餐','晚餐']},
-    {name:'魯肉便當', categories:['午餐','晚餐']},
-    {name:'武廟肉羹', categories:['早餐','午餐']},
-    {name:'八方雲集', categories:['午餐','晚餐','宵夜']},
-    {name:'麻辣豆腐', categories:['晚餐']},
-    {name:'炒麵(飯)', categories:['午餐','晚餐']},
-    {name:'虱目魚粥', categories:['早餐','午餐']},
-    {name:'辣炒年糕', categories:['午餐','晚餐','宵夜']},
-    {name:'排骨酥麵', categories:['午餐','晚餐']},
-    {name:'肯德基', categories:['午餐','晚餐','宵夜','餐廳']},
-    {name:'麥當勞', categories:['早餐','午餐','晚餐','宵夜']},
-    {name:'必勝客', categories:['午餐','晚餐','餐廳']},
-    {name:'砂鍋粥', categories:['晚餐','宵夜']}
-  ];
+// Google Sheets 試算表 ID
+const SHEET_ID = '1oz8eGyyPrPJ_l4Wzal4BQh-gTopz_uIRz_MoDwnnyaA';
 
-  let activeCategory = 'all';
-  let rotation = 0;
-  let spinning = false;
+// 分頁名稱對應地點名稱
+const SHEET_TABS = [
+  { gid: '0',        loc: '新莊' },
+  { gid: '475232220', loc: '新埔' }
+];
 
-  const tabsEl = document.getElementById('tabs');
+const FILLS   = ['#FFE0E6','#FFF3D6','#DFF3EA','#E4EEFF','#EFE6FB'];
+const BORDERS = ['#FF8FA3','#FFD166','#8AD1B8','#A5C8FF','#C9B6F2'];
+
+let DATA = {};      // { '新莊': [...], '新埔': [...] }
+let activeLoc  = '全區';
+let activeType = '全部';
+let rotation   = 0;
+let spinning   = false;
+
+// ── 1. 抓資料 ──────────────────────────────────
+async function fetchSheet(gid){
+  const url = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
+              '/gviz/tq?tqx=out:json&gid=' + gid;
+  const res  = await fetch(url);
+  const text = await res.text();
+  // gviz 回傳格式: /*O_o*/\ngoogle.visualization.Query.setResponse({...});
+  const json = JSON.parse(text.replace(/^[^{]+/, '').replace(/\);?\s*$/, ''));
+  const rows = json.table.rows;
+  return rows.map(r => {
+    const c = r.c;
+    return {
+      type:    (c[0] && c[0].v) ? String(c[0].v).trim() : '',
+      name:    (c[1] && c[1].v) ? String(c[1].v).trim() : '',
+      map:     (c[2] && c[2].v) ? String(c[2].v).trim() : '',
+      phone:   (c[3] && c[3].v) ? String(c[3].v).trim() : '',
+      hours:   (c[4] && c[4].v) ? String(c[4].v).trim() : '',
+      website: (c[5] && c[5].v) ? String(c[5].v).trim() : ''
+    };
+  }).filter(r => r.name && r.name !== '供應商'); // 去掉標題列和空列
+}
+
+async function loadAll(){
+  try {
+    for(const tab of SHEET_TABS){
+      DATA[tab.loc] = await fetchSheet(tab.gid);
+    }
+    buildUI();
+  } catch(e) {
+    document.getElementById('mainContent').innerHTML =
+      '<div class="error">⚠️ 資料載入失敗，請確認試算表已公開分享<br><small>' + e.message + '</small></div>';
+  }
+}
+
+// ── 2. 建立 UI ─────────────────────────────────
+function buildUI(){
+  document.getElementById('mainContent').innerHTML = `
+    <div class="loc-tabs" id="locTabs"></div>
+    <div class="tabs" id="tabs"></div>
+    <div class="wheel-zone">
+      <div class="pointer"></div>
+      <div class="wheel-outer">
+        <canvas id="wheelCanvas" width="600" height="600"></canvas>
+        <div class="wheel-hub">🍴</div>
+        <div class="empty-wheel" id="emptyWheel" style="display:none;">這個條件沒有餐廳</div>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <button class="spin-btn" id="spinBtn">轉一下</button>
+      <div class="spin-caption">spin the wheel</div>
+    </div>
+    <div class="result" id="result">
+      <div class="result-header">
+        <span class="result-label">今天就吃</span>
+        <span class="result-name" id="resultName">—</span>
+      </div>
+      <div class="result-body" id="resultBody"></div>
+    </div>`;
+
+  document.getElementById('spinBtn').onclick = spin;
+  renderAll();
+}
+
+// ── 3. 資料過濾 ────────────────────────────────
+function getPool(){
+  let pool = activeLoc === '全區'
+    ? [...(DATA['新莊']||[]), ...(DATA['新埔']||[])]
+    : (DATA[activeLoc] || []);
+  if(activeType !== '全部') pool = pool.filter(r => r.type === activeType);
+  return pool;
+}
+
+function getTypes(){
+  let pool = activeLoc === '全區'
+    ? [...(DATA['新莊']||[]), ...(DATA['新埔']||[])]
+    : (DATA[activeLoc] || []);
+  return ['全部', ...[...new Set(pool.map(r => r.type).filter(Boolean))].sort()];
+}
+
+// ── 4. 渲染 ────────────────────────────────────
+function renderLocTabs(){
+  const el = document.getElementById('locTabs');
+  if(!el) return;
+  el.innerHTML = '';
+  ['全區','新莊','新埔'].forEach(loc => {
+    const btn = document.createElement('div');
+    btn.className = 'loc-tab' + (activeLoc === loc ? ' active' : '');
+    btn.textContent = loc;
+    btn.onclick = () => { if(spinning) return; activeLoc = loc; activeType = '全部'; reset(); renderAll(); };
+    el.appendChild(btn);
+  });
+}
+
+function renderTypeTabs(){
+  const el = document.getElementById('tabs');
+  if(!el) return;
+  el.innerHTML = '';
+  const allPool = activeLoc === '全區'
+    ? [...(DATA['新莊']||[]), ...(DATA['新埔']||[])]
+    : (DATA[activeLoc] || []);
+  getTypes().forEach(t => {
+    const count = t === '全部' ? allPool.length : allPool.filter(r => r.type === t).length;
+    const btn = document.createElement('div');
+    btn.className = 'tab' + (activeType === t ? ' active' : '');
+    btn.innerHTML = t + '<span class="count">' + count + '</span>';
+    btn.onclick = () => { if(spinning) return; activeType = t; reset(); renderAll(); };
+    el.appendChild(btn);
+  });
+}
+
+function reset(){
+  const r = document.getElementById('result');
+  const c = document.getElementById('wheelCanvas');
+  if(r) r.classList.remove('show');
+  rotation = 0;
+  if(c){ c.style.transition='none'; c.style.transform='rotate(0deg)';
+    requestAnimationFrame(() => { c.style.transition='transform 3.4s cubic-bezier(.15,.65,.1,1)'; }); }
+}
+
+function drawWheel(){
   const canvas = document.getElementById('wheelCanvas');
+  const emptyEl = document.getElementById('emptyWheel');
+  const spinBtn = document.getElementById('spinBtn');
+  if(!canvas) return;
   const ctx = canvas.getContext('2d');
+  const pool = getPool();
+  const w = canvas.width, cx = w/2, r = w/2-6;
+  ctx.clearRect(0,0,w,w);
+  if(pool.length === 0){
+    if(emptyEl) emptyEl.style.display='flex';
+    if(spinBtn) spinBtn.disabled=true;
+    return;
+  }
+  if(emptyEl) emptyEl.style.display='none';
+  if(spinBtn) spinBtn.disabled=false;
+  const seg = (Math.PI*2)/pool.length;
+  pool.forEach((item, i) => {
+    const s=i*seg, e=s+seg;
+    ctx.beginPath(); ctx.moveTo(cx,cx); ctx.arc(cx,cx,r,s,e); ctx.closePath();
+    ctx.fillStyle=FILLS[i%FILLS.length]; ctx.fill();
+    ctx.strokeStyle=BORDERS[i%BORDERS.length]; ctx.lineWidth=4; ctx.stroke();
+    ctx.save(); ctx.translate(cx,cx); ctx.rotate(s+seg/2);
+    ctx.textAlign='right'; ctx.textBaseline='middle';
+    let fs=30, mc=10;
+    if(pool.length>4){fs=26;mc=8;}
+    if(pool.length>8){fs=22;mc=6;}
+    if(pool.length>12){fs=18;mc=5;}
+    if(pool.length>20){fs=14;mc=4;}
+    ctx.font='900 '+fs+'px Noto Sans TC,sans-serif';
+    let label=item.name; if(label.length>mc) label=label.slice(0,mc-1)+'…';
+    ctx.lineWidth=5; ctx.strokeStyle='rgba(255,255,255,0.9)'; ctx.lineJoin='round';
+    ctx.strokeText(label,r-18,0); ctx.fillStyle='#4A3F46'; ctx.fillText(label,r-18,0);
+    ctx.restore();
+  });
+}
+
+function spin(){
+  const pool = getPool();
+  const canvas = document.getElementById('wheelCanvas');
   const spinBtn = document.getElementById('spinBtn');
   const resultEl = document.getElementById('result');
-  const resultNameEl = document.getElementById('resultName');
-  const emptyWheelEl = document.getElementById('emptyWheel');
-
-  const SEGMENT_FILLS = ['#FFE0E6', '#FFF3D6', '#DFF3EA', '#E4EEFF', '#EFE6FB'];
-  const SEGMENT_BORDERS = ['#FF8FA3', '#FFD166', '#8AD1B8', '#A5C8FF', '#C9B6F2'];
-
-  function getFiltered(){
-    if(activeCategory === 'all') return restaurants;
-    return restaurants.filter(r => r.categories.includes(activeCategory));
-  }
-
-  function renderTabs(){
-    const all = [{key:'all', label:'全部'}].concat(CATEGORIES.map(c => ({key:c, label:c})));
-    tabsEl.innerHTML = '';
-    all.forEach(c => {
-      const count = c.key === 'all' ? restaurants.length : restaurants.filter(r=>r.categories.includes(c.key)).length;
-      const btn = document.createElement('div');
-      btn.className = 'tab' + (activeCategory === c.key ? ' active' : '');
-      btn.innerHTML = c.label + '<span class="count">' + count + '</span>';
-      btn.onclick = () => {
-        if(spinning) return;
-        activeCategory = c.key;
-        resetResult();
-        renderAll();
-      };
-      tabsEl.appendChild(btn);
-    });
-  }
-
-  function resetResult(){
-    resultEl.classList.remove('show');
-    rotation = 0;
-    canvas.style.transition = 'none';
-    canvas.style.transform = 'rotate(0deg)';
-    requestAnimationFrame(() => { canvas.style.transition = 'transform 3.4s cubic-bezier(.15,.65,.1,1)'; });
-  }
-
-  function drawWheel(){
-    const filtered = getFiltered();
-    const w = canvas.width, h = canvas.height;
-    const cx = w/2, cy = h/2, r = w/2 - 6;
-    ctx.clearRect(0,0,w,h);
-
-    if(filtered.length === 0){
-      emptyWheelEl.style.display = 'flex';
-      spinBtn.disabled = true;
-      return;
+  if(!pool.length || spinning || !canvas) return;
+  spinning=true; spinBtn.disabled=true;
+  if(resultEl) resultEl.classList.remove('show');
+  const segDeg=360/pool.length;
+  const wi=Math.floor(Math.random()*pool.length);
+  const jitter=(Math.random()-.5)*segDeg*.6;
+  let target=(270-(wi*segDeg+segDeg/2+jitter))%360;
+  if(target<0) target+=360;
+  const spins=5+Math.floor(Math.random()*3);
+  const cur=((rotation%360)+360)%360;
+  let delta=target-cur; if(delta<=0) delta+=360;
+  rotation=rotation+delta+360*spins;
+  canvas.style.transform='rotate('+rotation+'deg)';
+  setTimeout(()=>{
+    spinning=false; spinBtn.disabled=false;
+    const winner=pool[wi];
+    const nameEl=document.getElementById('resultName');
+    const bodyEl=document.getElementById('resultBody');
+    if(nameEl) nameEl.textContent=winner.name;
+    if(bodyEl){
+      let html='';
+      if(winner.hours) html+='<div class="result-row"><span class="icon">🕐</span><span>'+winner.hours+'</span></div>';
+      if(winner.phone) html+='<div class="result-row"><span class="icon">📞</span><span>'+winner.phone+'</span></div>';
+      html+='<div class="result-links">';
+      if(winner.map) html+='<a class="btn-map" href="'+winner.map+'" target="_blank">📍 地圖</a>';
+      if(winner.website) html+='<a class="btn-web" href="'+winner.website+'" target="_blank">🔗 官網</a>';
+      html+='</div>';
+      bodyEl.innerHTML=html;
     }
-    emptyWheelEl.style.display = 'none';
-    spinBtn.disabled = false;
+    if(resultEl) resultEl.classList.add('show');
+  },3500);
+}
 
-    const seg = (Math.PI*2) / filtered.length;
-    filtered.forEach((rest, i) => {
-      const start = i*seg, end = start+seg;
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.arc(cx, cy, r, start, end);
-      ctx.closePath();
-      ctx.fillStyle = SEGMENT_FILLS[i % SEGMENT_FILLS.length];
-      ctx.fill();
-      ctx.strokeStyle = SEGMENT_BORDERS[i % SEGMENT_BORDERS.length];
-      ctx.lineWidth = 4;
-      ctx.stroke();
+function renderAll(){
+  renderLocTabs();
+  renderTypeTabs();
+  drawWheel();
+}
 
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(start + seg/2);
-      ctx.textAlign = 'right';
-      ctx.textBaseline = 'middle';
-      let maxChars = 10;
-      let fontSize = 30;
-      if(filtered.length > 4){ maxChars = 8; fontSize = 26; }
-      if(filtered.length > 8){ maxChars = 6; fontSize = 22; }
-      if(filtered.length > 12){ maxChars = 5; fontSize = 18; }
-      ctx.font = '900 ' + fontSize + 'px Noto Sans TC, sans-serif';
-      let label = rest.name;
-      if(label.length > maxChars) label = label.slice(0, maxChars-1) + '…';
-      ctx.lineWidth = 5;
-      ctx.strokeStyle = 'rgba(255,255,255,0.9)';
-      ctx.lineJoin = 'round';
-      ctx.strokeText(label, r - 20, 0);
-      ctx.fillStyle = '#4A3F46';
-      ctx.fillText(label, r - 20, 0);
-      ctx.restore();
-    });
-  }
+// ── 5. 啟動 ────────────────────────────────────
+// 先抓新埔分頁的 gid，打開試算表後網址 #gid=xxx 就是該分頁 ID
+// 若新埔分頁 gid 不對，請更新 SHEET_TABS 裡的 gid 值
+loadAll();
 
-  function spin(){
-    const filtered = getFiltered();
-    if(filtered.length === 0 || spinning) return;
-    spinning = true;
-    spinBtn.disabled = true;
-    resultEl.classList.remove('show');
-
-    const segDeg = 360 / filtered.length;
-    const winnerIndex = Math.floor(Math.random() * filtered.length);
-    const jitter = (Math.random() - 0.5) * segDeg * 0.6;
-    const midAngleDeg = (winnerIndex * segDeg + segDeg/2 + jitter);
-    let targetMod = (270 - midAngleDeg) % 360;
-    if(targetMod < 0) targetMod += 360;
-
-    const spins = 5 + Math.floor(Math.random()*3);
-    const currentMod = ((rotation % 360) + 360) % 360;
-    let delta = targetMod - currentMod;
-    if(delta <= 0) delta += 360;
-    rotation = rotation + delta + 360*spins;
-
-    canvas.style.transform = 'rotate(' + rotation + 'deg)';
-
-    setTimeout(() => {
-      spinning = false;
-      spinBtn.disabled = false;
-      const winner = filtered[winnerIndex];
-      resultNameEl.textContent = winner.name;
-      resultEl.classList.add('show');
-    }, 3500);
-  }
-
-  function renderAll(){
-    renderTabs();
-    drawWheel();
-  }
-
-  spinBtn.onclick = spin;
-  renderAll();
 })();
 </script>
 
