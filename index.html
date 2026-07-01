@@ -339,13 +339,16 @@ function spin(){
     const nameEl=document.getElementById('resultName');
     const bodyEl=document.getElementById('resultBody');
     if(nameEl){
-      if(winner.map) nameEl.innerHTML='<a href="'+winner.map+'" target="_blank" style="color:#4A3F46;text-decoration:underline;text-decoration-color:#FFD166;">'+winner.name+'</a>';
-      else nameEl.textContent=winner.name;
+      let nameHtml = winner.map
+        ? '<a href="'+winner.map+'" target="_blank" style="color:#4A3F46;text-decoration:underline;text-decoration-color:#FFD166;">'+winner.name+'</a>'
+        : winner.name;
+      if(winner.website)
+        nameHtml += ' <a href="'+winner.website+'" target="_blank" style="display:inline-block;font-size:11px;background:#C9B6F2;color:#4A3F46;padding:2px 8px;border-radius:999px;text-decoration:none;font-family:Zen Maru Gothic,sans-serif;font-weight:700;vertical-align:middle;">🔗 官網</a>';
+      nameEl.innerHTML = nameHtml;
     }
     if(bodyEl){
       let html='';
       if(winner.hours||winner.phone) html+='<div class="result-row"><span class="icon">🕐</span><span>'+(winner.hours||'')+(winner.hours&&winner.phone?' ':'')+(winner.phone?'📞 '+winner.phone:'')+'</span></div>';
-      if(winner.website) html+='<div class="result-links"><a class="btn-web" href="'+winner.website+'" target="_blank">🔗 官網</a></div>';
       bodyEl.innerHTML=html;
     }
     if(resultEl) resultEl.classList.add('show');
