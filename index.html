@@ -348,7 +348,7 @@ function spin(){
     }
     if(bodyEl){
       let html='';
-      if(winner.hours||winner.phone) html+='<div class="result-row"><span class="icon">🕐</span><span>'+(winner.hours||'')+(winner.hours&&winner.phone?' ':'')+(winner.phone?'📞 '+winner.phone:'')+'</span></div>';
+      if(winner.hours||winner.phone) html+='<div class="result-row"><span class="icon">🕐</span><span>'+(winner.hours||'')+(winner.hours&&winner.phone?' ':'')+(winner.phone?'📞 <a href="tel:'+winner.phone+'" style="color:#4A3F46;text-decoration:underline;">'+winner.phone+'</a>':'')+'</span></div>';
       bodyEl.innerHTML=html;
     }
     if(resultEl) resultEl.classList.add('show');
