@@ -144,7 +144,7 @@ const SHEET_ID = '1oz8eGyyPrPJ_l4Wzal4BQh-gTopz_uIRz_MoDwnnyaA';
 // 分頁名稱對應地點名稱
 const SHEET_TABS = [
   { gid: '0',        loc: '新莊' },
-  { gid: '475232220', loc: '新埔' }
+  { gid: '87995849',  loc: '新埔' }
 ];
 
 const FILLS   = ['#FFE0E6','#FFF3D6','#DFF3EA','#E4EEFF','#EFE6FB'];
@@ -157,17 +157,17 @@ let rotation   = 0;
 let spinning   = false;
 
 // ── 1. 抓資料 ──────────────────────────────────
-async function fetchSheet(gid){
+async function fetchSheet(gid, loc){
   const url = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
               '/gviz/tq?tqx=out:json&gid=' + gid;
   const res  = await fetch(url);
   const text = await res.text();
-  // gviz 回傳格式: /*O_o*/\ngoogle.visualization.Query.setResponse({...});
   const json = JSON.parse(text.replace(/^[^{]+/, '').replace(/\);?\s*$/, ''));
   const rows = json.table.rows;
   return rows.map(r => {
     const c = r.c;
     return {
+      loc:     loc,
       type:    (c[0] && c[0].v) ? String(c[0].v).trim() : '',
       name:    (c[1] && c[1].v) ? String(c[1].v).trim() : '',
       map:     (c[2] && c[2].v) ? String(c[2].v).trim() : '',
@@ -175,7 +175,7 @@ async function fetchSheet(gid){
       hours:   (c[4] && c[4].v) ? String(c[4].v).trim() : '',
       website: (c[5] && c[5].v) ? String(c[5].v).trim() : ''
     };
-  }).filter(r => r.name && r.name !== '供應商'); // 去掉標題列和空列
+  }).filter(r => r.name && r.name !== '供應商');
 }
 
 async function loadAll(){
