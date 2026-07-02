@@ -61,7 +61,6 @@ background:#fff;color:#4A3F46;cursor:pointer;
 box-shadow:0 2px 0 rgba(74,63,70,0.1);transition:all .15s;user-select:none;
 }
 .tab.active{background:#E2486A;border-color:#E2486A;color:#fff;box-shadow:0 2px 0 #A4203F;transform:translateY(1px);}
-.tab .count{font-size:12px;opacity:.8;margin-left:2px;}
 
 .wheel-zone{position:relative;display:flex;flex-direction:column;align-items:center;margin-bottom:6px;}
 .pointer{
@@ -260,10 +259,9 @@ function renderTypeTabs(){
     ? [...(DATA['新莊']||[]), ...(DATA['新埔']||[])]
     : (DATA[activeLoc] || []);
   getTypes().forEach(t => {
-    const count = t === '全部' ? allPool.length : allPool.filter(r => r.type === t).length;
     const btn = document.createElement('div');
     btn.className = 'tab' + (activeType === t ? ' active' : '');
-    btn.innerHTML = t + '<span class="count">' + count + '</span>';
+    btn.textContent = t;
     btn.onclick = () => { if(spinning) return; activeType = t; reset(); renderAll(); };
     el.appendChild(btn);
   });
